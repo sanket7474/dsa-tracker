@@ -1,0 +1,32 @@
+# netlify.toml
+# Place this in the root of your dsa-tracker repo, alongside package.json.
+#
+# Two things this handles:
+#
+# 1. Your app has no bundler/build step — it serves static files from
+#    `public/` and loads React/ReactDOM/Babel as UMD builds straight from
+#    node_modules. Netlify can't serve node_modules directly the way
+#    Express's static middleware does, so the build command copies just
+#    those three vendor files into public/vendor/ before the site goes
+#    live — same paths your HTML already references (/vendor/react/...,
+#    /vendor/react-dom/..., /vendor/babel.min.js), so no frontend changes
+#    needed.
+#
+# 2. Classic Netlify Functions (CommonJS, exports.handler) are served at
+#    /.netlify/functions/<name> by default, not /api/data. The redirect
+#    below maps /api/data -> the function, so your frontend's existing
+#    fetch('/api/data') calls keep working unchanged.
+
+[build]
+  command = "mkdir -p public/vendor/react public/vendor/react-dom && cp node_modules/react/umd/*.js public/vendor/react/ && cp node_modules/react-dom/umd/*.js public/vendor/react-dom/ && cp node_modules/@babel/standalone/babel.min.js public/vendor/babel.min.js"
+  publish = "public"
+  functions = "netlify/functions"
+
+[functions]
+  node_bundler = "esbuild"
+
+[[redirects]]
+  from = "/api/data"
+  to = "/.netlify/functions/data"
+  status = 200
+  force = true
