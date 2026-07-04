@@ -14,22 +14,14 @@
 
 const { connectLambda, getStore } = require("@netlify/blobs");
 
+// Your real, pre-filled data — bundled straight from the repo at build time.
+// esbuild (Netlify's function bundler) follows this require() and packages
+// data/data.json into the function, so the actual 161 problems you already
+// have locally become the seed data here too, instead of blank phases.
+const seedData = require("../../data/data.json");
+
 const STORE_NAME = "dsa-tracker-data";
 const KEY = "progress";
-
-// Same phase list as server.js's EMPTY_PHASES — keep these two in sync if
-// you ever add/rename a phase.
-const EMPTY_PHASES = [
-  "setup", "arrays", "twoptr", "binsearch", "strings", "linkedlist",
-  "stacks", "recursion", "trees", "heaps", "graphs", "dp", "greedy",
-  "trie-bits", "revision",
-];
-
-function emptyData() {
-  const phases = {};
-  EMPTY_PHASES.forEach((id) => { phases[id] = []; });
-  return { phases };
-}
 
 exports.handler = async (event) => {
   // Required in classic CommonJS ("Lambda compatibility") functions —
@@ -42,9 +34,9 @@ exports.handler = async (event) => {
   if (event.httpMethod === "GET") {
     let data = await store.get(KEY, { type: "json" });
     if (!data || !data.phases) {
-      // First run / empty store — seed it, same as server.js does on a
-      // missing or unreadable data.json.
-      data = emptyData();
+      // First run / empty store — seed it from your actual data.json
+      // content (bundled in at build time), not a blank shape.
+      data = seedData;
       await store.setJSON(KEY, data);
     }
     return {
