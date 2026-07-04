@@ -1,0 +1,4091 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DSA Roadmap — Garden of Logic</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Bungee&family=IBM+Plex+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<script crossorigin src="/vendor/react/react.production.min.js"></script>
+<script crossorigin src="/vendor/react-dom/react-dom.production.min.js"></script>
+<script src="/vendor/babel.min.js"></script>
+<style>
+  :root{
+    --nb-bg:#ead7ff; --nb-ink:#111111; --nb-paper:#ffffff;
+    --nb-purple:#b388ff; --nb-lilac:#d3b2ff; --nb-pink:#ffb9dc;
+    --nb-blue:#b7d9ff; --nb-mint:#bff2d8; --nb-peach:#ffd2b3;
+    --nb-yellow:#fff2a8; --nb-shadow:#8756c7;
+    --bg: var(--nb-bg); --bg-raised:var(--nb-paper); --bg-card:var(--nb-blue);
+    --border:var(--nb-ink); --border-soft:var(--nb-shadow);
+    --text:var(--nb-ink); --text-dim:var(--nb-ink); --text-faint:var(--nb-shadow);
+    --teal:var(--nb-mint); --teal-dim:var(--nb-purple); --gold:var(--nb-yellow); --coral:var(--nb-peach); --violet:var(--nb-purple); --blue:var(--nb-blue);
+    --font-display:'Sora', sans-serif;
+    --font-body:'Plus Jakarta Sans', sans-serif;
+    --font-mono:'Fira Code', monospace;
+  }
+  @keyframes rise-fade{
+    from{opacity:0; transform:translateY(8px);}
+    to{opacity:1; transform:translateY(0);}
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--text); font-family:var(--font-body); line-height:1.5; min-height:100vh; padding-bottom:80px;
+    color-scheme:light;
+  }
+  body::before, body::after{
+    content:''; position:fixed; inset:auto; pointer-events:none; z-index:0; filter:blur(70px); opacity:.45;
+  }
+  body::before{width:280px; height:280px; left:-90px; top:140px; background:rgba(63,214,192,.10);}
+  body::after{width:340px; height:340px; right:-120px; top:420px; background:rgba(155,140,242,.09);}
+  .mono{font-family:var(--font-mono);}
+  .page-shell{max-width:1220px; margin:0 auto; padding:30px 22px 58px; position:relative; z-index:1;}
+  header{padding:26px 26px 28px; margin:0 auto; border:1px solid rgba(38,50,74,.7); background:linear-gradient(180deg, rgba(19,28,44,.92), rgba(19,28,44,.72)); border-radius:24px; box-shadow:0 22px 50px rgba(0,0,0,.18); backdrop-filter:blur(14px);}
+  .header-top{display:flex; align-items:flex-start; justify-content:space-between; gap:18px; flex-wrap:wrap;}
+  .eyebrow{font-family:'JetBrains Mono',monospace; font-size:12px; letter-spacing:.16em; text-transform:uppercase; color:var(--teal); margin-bottom:12px; display:flex; align-items:center; gap:10px;}
+  .eyebrow::before{content:''; width:18px; height:1px; background:var(--teal); display:inline-block;}
+  h1{font-family:var(--font-display); font-weight:700; font-size:clamp(28px,4.2vw,40px); letter-spacing:.01em; margin-bottom:11px;}
+  h1 span{color:var(--text-faint);}
+  .sub{color:var(--text-dim); font-size:15px; max-width:680px; margin-bottom:8px;}
+  .save-indicator{font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--text-faint); margin-top:10px; white-space:nowrap;}
+  .save-indicator.saving{color:var(--gold);}
+  .save-indicator.saved{color:var(--teal);}
+  .header-meta{display:flex; flex-wrap:wrap; gap:10px; margin-top:18px;}
+  .meta-pill{display:inline-flex; align-items:center; gap:8px; padding:8px 12px; border:1px solid var(--border); border-radius:999px; background:rgba(22,31,49,.72); color:var(--text-dim); font-family:'JetBrains Mono',monospace; font-size:11px;}
+  .meta-pill strong{color:var(--text); font-weight:600;}
+  .dashboard{margin-top:18px;}
+  .dash-grid{display:grid; grid-template-columns:1.1fr 1.5fr; gap:18px;}
+  .overview-hero-grid{grid-template-columns:minmax(260px, .8fr) minmax(0, 1.2fr); align-items:start;}
+  .dash-grid + .dash-grid{margin-top:16px;}
+  .overview-side-stack{display:flex; flex-direction:column; gap:14px;}
+  .card{background:linear-gradient(180deg, rgba(22,31,49,.96), rgba(17,25,40,.96)); border:1px solid var(--border); border-radius:18px; padding:24px 26px; box-shadow:0 16px 32px rgba(0,0,0,.18); transition:transform .2s ease, border-color .2s ease, box-shadow .2s ease; animation:rise-fade .45s ease both;}
+  .card:hover{transform:translateY(-2px); border-color:#314368; box-shadow:0 20px 36px rgba(0,0,0,.24);}
+  .card.card-compact{padding:18px 20px;}
+  .progress-card{padding:18px 20px;}
+  .progress-card .ring-wrap{gap:14px; margin-top:8px; align-items:flex-end;}
+  .progress-card .ring-num{font-size:28px; line-height:1;}
+  .progress-card .legend{gap:10px 12px; margin-top:12px;}
+  .progress-card .legend span{font-size:11px;}
+  .overview-mini-grid{display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:12px;}
+  .overview-stat-card{padding:14px 15px; min-height:96px; display:flex; flex-direction:column; justify-content:space-between;}
+  .overview-stat-label{font-family:'JetBrains Mono',monospace; font-size:10.5px; letter-spacing:.08em; text-transform:uppercase; color:var(--text-faint);}
+  .overview-stat-value{font-family:var(--font-display); font-size:26px; line-height:1; color:var(--text); margin-top:8px;}
+  .overview-stat-note{font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--text-faint); margin-top:8px;}
+  .ring-label{font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--text-faint); text-transform:uppercase; letter-spacing:.08em;}
+  .ring-wrap{display:flex; align-items:center; gap:20px; margin-top:10px;}
+  .ring-num{font-family:'JetBrains Mono',monospace; font-size:32px; font-weight:700; color:var(--teal);}
+  .legend{display:flex; flex-wrap:wrap; gap:14px; margin-top:14px;}
+  .legend span{font-size:12px; color:var(--text-dim); display:flex; align-items:center; gap:6px;}
+  .dot{width:8px; height:8px; border-radius:50%; display:inline-block;}
+  .ui-icon{display:inline-flex; align-items:center; justify-content:center; vertical-align:middle; line-height:1;}
+  .ui-icon svg{display:block;}
+  .phase-bars{display:flex; flex-direction:column; gap:10px;}
+  .pb-row{display:grid; grid-template-columns:150px 1fr 50px; align-items:center; gap:10px;}
+  .pb-row .pname{font-size:12.5px; color:var(--text-dim); font-family:'JetBrains Mono',monospace; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+  .pb-track{height:6px; background:var(--border-soft); border-radius:4px; overflow:hidden;}
+  .pb-fill{height:100%; background:linear-gradient(90deg,var(--teal-dim),var(--teal)); border-radius:4px;}
+  .pb-row .pcount{font-size:11.5px; color:var(--text-faint); text-align:right; font-family:'JetBrains Mono',monospace;}
+  .controls{margin-top:18px; padding:18px 20px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:13px; border:1px solid rgba(38,50,74,.7); background:rgba(19,28,44,.78); border-radius:18px; box-shadow:0 14px 28px rgba(0,0,0,.14); backdrop-filter:blur(10px); transition:border-color .2s ease, box-shadow .2s ease; animation:rise-fade .45s ease both;}
+  .controls:hover{border-color:#314368; box-shadow:0 18px 30px rgba(0,0,0,.18);}
+  .control-block{display:flex; align-items:center; flex-wrap:wrap; gap:8px;}
+  .control-label{font-family:'JetBrains Mono',monospace; font-size:10px; text-transform:uppercase; letter-spacing:.08em; color:var(--text-faint); margin-right:4px;}
+  .filter-group{display:flex; gap:8px; flex-wrap:wrap;}
+  .search-wrap{display:flex; align-items:center; gap:8px; margin-left:auto;}
+  .search-input{
+    min-width:220px; width:min(100%, 360px); background:var(--bg-card); border:1px solid var(--border); color:var(--text);
+    padding:8px 12px; border-radius:999px; font-family:'JetBrains Mono',monospace; font-size:12px; transition:border-color .15s ease, box-shadow .15s ease;
+  }
+  .search-input:focus{outline:none; border-color:var(--teal-dim); box-shadow:0 0 0 3px rgba(63,214,192,.14);}
+  .search-hint{font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--text-faint); white-space:nowrap;}
+  .search-count{font-family:'JetBrains Mono',monospace; font-size:10.5px; color:var(--text-faint); white-space:nowrap;}
+  .search-clear{font-family:'JetBrains Mono',monospace; font-size:10.5px; background:var(--bg-card); border:1px solid var(--border); color:var(--text-dim); padding:6px 10px; border-radius:999px; cursor:pointer; transition:all .15s ease;}
+  .search-clear:hover{border-color:var(--coral); color:var(--coral);}
+  .filter-btn{font-family:'JetBrains Mono',monospace; font-size:12.5px; background:var(--bg-card); border:1px solid var(--border); color:var(--text-dim); padding:8px 14px; border-radius:999px; cursor:pointer; transition:transform .15s ease, border-color .15s ease, background .15s ease, box-shadow .15s ease;}
+  .filter-btn:hover{border-color:var(--teal-dim); transform:translateY(-1px);}
+  .filter-btn.active{background:linear-gradient(135deg, #3fd6c0, #57e4cf); color:#0d1420; border-color:transparent; font-weight:700; box-shadow:0 10px 18px rgba(63,214,192,.25);}
+  .reset-btn{font-family:'JetBrains Mono',monospace; font-size:12.5px; background:transparent; border:1px solid var(--border); color:var(--text-faint); padding:8px 14px; border-radius:999px; cursor:pointer; transition:transform .15s ease, border-color .15s ease, color .15s ease, background .15s ease;}
+  .reset-btn:hover{border-color:#3b4f73; color:var(--text-dim); background:rgba(255,255,255,.02); transform:translateY(-1px);}
+  .reset-btn.reset-danger:hover{border-color:var(--coral); color:var(--coral); background:rgba(224,122,95,.10);}
+  .reset-btn.reset-neutral:hover{border-color:var(--teal-dim); color:var(--teal); background:rgba(63,214,192,.08);}
+  .quick-actions{margin-top:20px; display:flex; align-items:center; flex-wrap:wrap; gap:8px;}
+  .quick-title{font-family:'JetBrains Mono',monospace; font-size:10px; text-transform:uppercase; letter-spacing:.08em; color:var(--text-faint); margin-right:6px;}
+  .quick-btn{font-family:'JetBrains Mono',monospace; font-size:12px; background:rgba(19,28,44,.84); border:1px solid var(--border); color:var(--text-dim); padding:7px 12px; border-radius:999px; cursor:pointer; transition:all .15s ease;}
+  .quick-btn:hover{border-color:var(--teal-dim); color:var(--teal); background:rgba(63,214,192,.08); transform:translateY(-1px);}
+  .quick-btn .ui-icon{margin-right:6px;}
+  .study-timer{margin-top:12px; display:flex; align-items:center; flex-wrap:wrap; gap:10px; padding:10px 12px; border:3px solid #111111; border-radius:0; background:#ffffff;}
+  .timer-presets{display:flex; align-items:center; flex-wrap:wrap; gap:6px;}
+  .timer-preset-btn{font-family:'JetBrains Mono',monospace; font-size:11px; border:3px solid #111111; background:#f4d8ff; color:#111111; padding:5px 9px; border-radius:0; cursor:pointer; transition:all .12s ease;}
+  .timer-preset-btn:hover{background:#bff2d8; transform:translateY(-1px);}
+  .timer-preset-btn.active{background:#b388ff; color:#ffffff; border-color:#111111; font-weight:700;}
+  .timer-circle{--timer-pct:100; width:104px; height:104px; border:3px solid #111111; border-radius:50%; display:flex; align-items:center; justify-content:center; background:conic-gradient(#b388ff calc(var(--timer-pct) * 1%), #ead7ff 0); padding:5px;}
+  .timer-circle.running{background:conic-gradient(#7be3bd calc(var(--timer-pct) * 1%), #ead7ff 0);}
+  .timer-circle-inner{width:100%; height:100%; border-radius:50%; border:3px solid #111111; background:#ffffff; display:flex; flex-direction:column; align-items:center; justify-content:center; line-height:1.05;}
+  .timer-clock{font-family:'JetBrains Mono',monospace; font-size:17px; font-weight:800; color:#111111;}
+  .timer-left{font-family:'JetBrains Mono',monospace; font-size:9px; text-transform:uppercase; letter-spacing:.06em; color:#111111; margin-top:2px;}
+  .timer-controls{display:flex; align-items:center; gap:6px; margin-left:auto;}
+  .timer-control-btn{font-family:'JetBrains Mono',monospace; font-size:11px; border:3px solid #111111; background:#d3b2ff; color:#111111; padding:6px 10px; border-radius:0; cursor:pointer; transition:all .12s ease; display:inline-flex; align-items:center; gap:5px;}
+  .timer-control-btn:hover{background:#bff2d8; transform:translateY(-1px);}
+  .timer-control-btn.primary{background:#b388ff; color:#ffffff; border-color:#111111; font-weight:700;}
+  .guide-bar{margin-top:10px; border:1px solid rgba(111,179,224,.28); background:rgba(111,179,224,.10); color:var(--text-dim); border-radius:12px; padding:8px 11px; font-size:12px; font-family:'JetBrains Mono',monospace;}
+  .guide-bar strong{color:var(--blue);}
+  .section-switcher{margin:16px auto 12px; border:1px solid var(--border); background:linear-gradient(180deg, rgba(20,30,47,.94), rgba(17,24,39,.90)); border-radius:18px; box-shadow:0 14px 30px rgba(0,0,0,.16); padding:16px;}
+  .section-switcher-label{font-family:var(--font-mono); font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--text-faint); margin-bottom:10px;}
+  .section-tabs{display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:10px;}
+  .section-tab-btn{font-family:var(--font-display); font-size:16px; letter-spacing:.01em; border:1px solid var(--border); background:rgba(22,31,49,.82); color:var(--text-dim); border-radius:12px; padding:13px 15px; cursor:pointer; transition:all .16s ease; min-height:50px;}
+  .section-tab-btn:hover{border-color:rgba(189,163,255,.5); color:var(--violet-2); transform:translateY(-1px);}
+  .section-tab-btn.active{background:linear-gradient(135deg, #bda3ff, #e7b8ff); color:#1a1230; border-color:transparent; font-weight:700; box-shadow:0 12px 20px rgba(189,163,255,.26);}
+  .list{margin-top:18px; display:flex; flex-direction:column; gap:16px;}
+  .group{background:linear-gradient(180deg, rgba(22,31,49,.96), rgba(17,25,40,.92)); border:1px solid var(--border); border-radius:18px; overflow:hidden; box-shadow:0 16px 32px rgba(0,0,0,.16); transition:transform .2s ease, border-color .2s ease, box-shadow .2s ease; animation:rise-fade .45s ease both;}
+  .group:hover{transform:translateY(-2px); border-color:#314368; box-shadow:0 22px 34px rgba(0,0,0,.24);}
+  .group-head{display:flex; align-items:center; gap:16px; padding:20px 24px; cursor:pointer; user-select:none; background:linear-gradient(90deg, rgba(255,255,255,.015), transparent); transition:background .15s ease;}
+  .group-head:hover{background:linear-gradient(90deg, rgba(63,214,192,.08), transparent 50%);}
+  .group-idx{font-family:'JetBrains Mono',monospace; font-size:13px; color:var(--bg); background:linear-gradient(135deg, #3fd6c0, #57e4cf); width:30px; height:30px; border-radius:8px; display:flex; align-items:center; justify-content:center; font-weight:700; flex-shrink:0; box-shadow:0 8px 16px rgba(63,214,192,.24);}
+  .group-idx.pat{background:linear-gradient(135deg, #9b8cf2, #c0b6ff); box-shadow:0 8px 16px rgba(155,140,242,.24);}
+  .group-titles{flex:1; min-width:0;}
+  .group-titles h3{font-size:16px; font-weight:600;}
+  .group-titles .weeks{font-family:'JetBrains Mono',monospace; font-size:11.5px; color:var(--text-faint); margin-top:2px;}
+  .group-micro{display:flex; flex-wrap:wrap; gap:6px; margin-top:6px;}
+  .micro-chip{font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--text-faint); border:1px solid var(--border-soft); border-radius:999px; padding:2px 7px; background:rgba(255,255,255,.02);}
+  .mini{font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--text-dim); flex-shrink:0;}
+  .streak-badge{font-family:'JetBrains Mono',monospace; font-size:11px; padding:4px 11px; border-radius:20px; white-space:nowrap; flex-shrink:0;}
+  .streak-ready{background:rgba(63,214,192,.15); color:var(--teal); border:1px solid var(--teal-dim);}
+  .streak-progress{background:rgba(217,168,81,.12); color:var(--gold); border:1px solid rgba(217,168,81,.35);}
+  .streak-none{background:var(--bg-raised); color:var(--text-faint); border:1px solid var(--border);}
+  .chevron{color:var(--text-faint); transition:transform .2s; flex-shrink:0;}
+  .group.open .chevron{transform:rotate(90deg);}
+  .group-body{display:none; padding:0 22px 22px; border-top:1px solid var(--border-soft);}
+  .group.open .group-body{display:block;}
+  .blurb{color:var(--text-dim); font-size:13.5px; margin:16px 0 12px; max-width:680px;}
+  .patterns{display:flex; flex-wrap:wrap; gap:8px; margin-bottom:16px;}
+  .pattern-chip{font-family:'JetBrains Mono',monospace; font-size:11.5px; background:rgba(217,168,81,.08); border:1px solid rgba(217,168,81,.18); color:var(--gold); padding:5px 10px; border-radius:999px;}
+  .table-wrap{margin-top:8px; border:1px solid var(--border-soft); border-radius:12px; overflow:auto; background:rgba(12,19,31,.28);}
+  table{width:100%; border-collapse:collapse; margin-top:8px;}
+  .table-wrap table{margin-top:0;}
+  thead th{text-align:left; font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:.06em; text-transform:uppercase; color:var(--text-faint); padding:8px; border-bottom:1px solid var(--border-soft); position:sticky; top:0; z-index:2; background:rgba(19,28,44,.96); backdrop-filter:blur(8px);}
+  tbody td{padding:8px; border-bottom:1px solid var(--border-soft); font-size:13px; vertical-align:middle;}
+  tbody tr:hover{background:rgba(255,255,255,.015);}
+  .prob-name{color:var(--text); font-weight:500;}
+  .prob-name a{color:inherit; text-decoration:none; border-bottom:1px dotted var(--text-faint);}
+  .prob-name a:hover{color:var(--teal); border-color:var(--teal);}
+  .search-mark{background:rgba(217,168,81,.28); color:var(--text); padding:0 2px; border-radius:3px;}
+  .prob-topic{font-family:'JetBrains Mono',monospace; font-size:10.5px; color:var(--text-faint);}
+  .status-pill{display:inline-flex; align-items:center; gap:5px; margin-left:8px; font-family:'JetBrains Mono',monospace; font-size:10px; border:1px solid var(--border); color:var(--text-faint); border-radius:999px; padding:2px 7px;}
+  .status-pill.status-btn{appearance:none; background:transparent; cursor:pointer;}
+  .status-pill.status-btn:hover{transform:translateY(-1px);}
+  .status-pill.status-not-started{border-color:#3a4358; color:#9aa4bb;}
+  .status-pill.status-attempted{border-color:rgba(217,168,81,.35); color:var(--gold);}
+  .status-pill.status-solved{border-color:rgba(63,214,192,.4); color:var(--teal);}
+  .status-pill.status-revisit{border-color:rgba(224,122,95,.4); color:var(--coral);}
+  .diff-badge{font-family:'JetBrains Mono',monospace; font-size:10.5px; padding:3px 8px; border-radius:5px; display:inline-block;}
+  .diff-Easy{background:rgba(63,214,192,.12); color:var(--teal);}
+  .diff-Medium{background:rgba(217,168,81,.14); color:var(--gold);}
+  .diff-Hard{background:rgba(224,122,95,.14); color:var(--coral);}
+  select.status-select{font-family:'JetBrains Mono',monospace; font-size:12px; background:linear-gradient(180deg, rgba(41,31,68,.94), rgba(31,24,52,.94)); border:1px solid var(--border); color:var(--text); padding:6px 30px 6px 8px; border-radius:8px; cursor:pointer; transition:border-color .15s ease, box-shadow .15s ease, transform .15s ease; appearance:none; -webkit-appearance:none; -moz-appearance:none; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23d8c8ff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right 9px center;}
+  select.status-select:hover{border-color:#35507a;}
+  select.status-select:focus{outline:none; border-color:var(--teal-dim); box-shadow:0 0 0 3px rgba(63,214,192,.14);}
+  .pattern-field{width:100%; background:transparent; border:none; border-bottom:1px dotted var(--border); color:var(--violet); font-family:'JetBrains Mono',monospace; font-size:11.5px; padding:4px 2px;}
+  .pattern-field:focus{outline:none; border-bottom:1px solid var(--violet); box-shadow:0 2px 0 rgba(155,140,242,.16);}
+  .company-field{width:100%; background:transparent; border:none; border-bottom:1px dotted var(--border); color:var(--blue); font-family:'JetBrains Mono',monospace; font-size:11.5px; padding:4px 2px;}
+  .company-field:focus{outline:none; border-bottom:1px solid var(--blue); box-shadow:0 2px 0 rgba(111,179,224,.16);}
+  .heatmap-grid{
+    display:grid; grid-template-rows:repeat(7, 1fr); grid-auto-flow:column; grid-auto-columns:11px;
+    gap:3px; overflow-x:auto; padding-bottom:4px;
+  }
+  .heat-cell{width:11px; height:11px; border-radius:3px; background:var(--border-soft);}
+  .heat-1{background:rgba(63,214,192,0.28);}
+  .heat-2{background:rgba(63,214,192,0.58);}
+  .heat-3{background:var(--teal);}
+  .heat-legend{display:flex; align-items:center; gap:5px; margin-top:10px; font-size:10.5px; color:var(--text-faint); font-family:'JetBrains Mono',monospace;}
+  .heat-legend .heat-cell{width:10px; height:10px;}
+  .revisit-list{display:flex; flex-direction:column; gap:10px;}
+  .revisit-row{display:flex; align-items:center; justify-content:space-between; gap:12px; padding:10px 12px; border-bottom:1px solid var(--border-soft);}
+  .revisit-row:last-child{border-bottom:none; padding-bottom:0;}
+  .revisit-info{flex:1; min-width:0; padding-right:6px;}
+  .revisit-name{font-size:13px; color:var(--text); font-weight:500;}
+  .revisit-meta{font-size:11px; color:var(--text-faint); font-family:'JetBrains Mono',monospace; margin-top:2px;}
+  .revisit-solve-btn{font-family:'JetBrains Mono',monospace; font-size:10.5px; background:linear-gradient(180deg, rgba(24,34,52,.92), rgba(20,29,45,.92)); border:1px solid var(--teal-dim); color:var(--teal); padding:8px 12px; border-radius:7px; cursor:pointer; white-space:nowrap; transition:all .15s ease; flex-shrink:0;}
+  .revisit-solve-btn:hover{background:rgba(63,214,192,.14); box-shadow:0 0 0 2px rgba(63,214,192,.10) inset;}
+  .notes-input{width:100%; background:transparent; border:none; border-bottom:1px solid transparent; color:var(--text-dim); font-size:12.5px; font-family:'Inter',sans-serif; padding:4px 2px;}
+  .notes-input:focus{outline:none; border-bottom:1px solid var(--teal-dim); box-shadow:0 2px 0 rgba(63,214,192,.14);}
+  .unaided-wrap{display:inline-flex; align-items:center; gap:7px; font-size:10px; color:var(--text-faint); font-family:'JetBrains Mono',monospace; white-space:nowrap; cursor:pointer; user-select:none;}
+  .unaided-wrap input{position:absolute; opacity:0; width:1px; height:1px; pointer-events:none;}
+  .unaided-box{
+    width:16px; height:16px; border-radius:5px; border:1px solid var(--border); background:var(--bg-raised);
+    display:inline-flex; align-items:center; justify-content:center; transition:all .16s ease;
+    box-shadow:inset 0 0 0 1px rgba(255,255,255,.02);
+  }
+  .unaided-box::after{
+    content:''; width:8px; height:8px; border-radius:2px; background:var(--teal); transform:scale(0); transition:transform .15s ease;
+  }
+  .unaided-wrap input:checked + .unaided-box{border-color:var(--teal-dim); background:rgba(63,214,192,.12);}
+  .unaided-wrap input:checked + .unaided-box::after{transform:scale(1);}
+  .unaided-wrap input:focus-visible + .unaided-box{outline:2px solid rgba(63,214,192,.35); outline-offset:2px;}
+  .del-btn{background:transparent; border:none; color:var(--text-faint); cursor:pointer; font-size:15px; padding:2px 6px; border-radius:4px;}
+  .del-btn:hover{color:var(--coral); background:rgba(224,122,95,.1);}
+  .row-actions{display:flex; align-items:center; justify-content:flex-end; gap:6px; opacity:1;}
+  .mini-action-btn{
+    display:inline-flex; align-items:center; justify-content:center;
+    width:24px; height:24px; border-radius:6px; border:1px solid var(--border);
+    background:rgba(19,28,44,.72); color:var(--text-dim); cursor:pointer;
+    transition:all .15s ease;
+  }
+  .mini-action-btn:hover{border-color:var(--teal-dim); color:var(--teal); background:rgba(63,214,192,.10);}
+  .mini-action-btn.danger:hover{border-color:rgba(224,122,95,.45); color:var(--coral); background:rgba(224,122,95,.12);}
+  .add-row{display:flex; gap:8px; margin-top:14px; flex-wrap:wrap;}
+  .add-row input, .add-row select{font-family:'Inter',sans-serif; font-size:13px; background:linear-gradient(180deg, rgba(41,31,68,.94), rgba(31,24,52,.94)); border:1px solid var(--border); color:var(--text); padding:8px 10px; border-radius:8px; transition:border-color .15s ease, box-shadow .15s ease;}
+  .add-row select{appearance:none; -webkit-appearance:none; -moz-appearance:none; padding-right:28px; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23d8c8ff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right 8px center;}
+  .add-row input:focus, .add-row select:focus{outline:none; border-color:var(--teal-dim); box-shadow:0 0 0 3px rgba(63,214,192,.12);}
+  .add-row input.name-input{flex:2; min-width:160px;}
+  .add-row input.link-input{flex:1.3; min-width:120px;}
+  .add-row input.pat-input{flex:1.3; min-width:120px; font-family:'JetBrains Mono',monospace; font-size:12px;}
+  .add-row select{font-family:'JetBrains Mono',monospace; font-size:12px;}
+  .add-btn{font-family:'JetBrains Mono',monospace; font-size:12.5px; background:linear-gradient(135deg, #3fd6c0, #57e4cf); color:#0d1420; border:none; padding:8px 16px; border-radius:8px; cursor:pointer; font-weight:700; box-shadow:0 10px 16px rgba(63,214,192,.25); transition:transform .15s ease, box-shadow .15s ease, filter .15s ease;}
+  .add-btn:hover{transform:translateY(-1px); box-shadow:0 14px 20px rgba(63,214,192,.30); filter:saturate(1.05);}
+  .empty-hint{color:var(--text-faint); font-size:12.5px; font-style:italic; padding:10px 0;}
+  .notice-bar{
+    margin-top:12px; border:1px solid rgba(217,168,81,.35); background:rgba(217,168,81,.10);
+    color:var(--text-dim); border-radius:12px; padding:10px 12px; font-size:12px; line-height:1.45;
+    font-family:'JetBrains Mono',monospace;
+  }
+  .notice-bar strong{color:var(--gold);}
+  .tips-bar{
+    margin-top:12px; border:1px solid rgba(63,214,192,.30); background:linear-gradient(180deg, rgba(63,214,192,.10), rgba(22,31,49,.72));
+    color:var(--text-dim); border-radius:12px; padding:10px 12px; display:flex; align-items:center; gap:10px; flex-wrap:wrap;
+    box-shadow:0 12px 24px rgba(0,0,0,.12);
+  }
+  .tips-title{font-family:'JetBrains Mono',monospace; font-size:11px; text-transform:uppercase; letter-spacing:.08em; color:var(--teal);}
+  .tips-items{font-size:11.5px; display:flex; align-items:center; flex-wrap:wrap; gap:8px;}
+  .tips-sep{color:var(--text-faint);}
+  .tips-actions{margin-left:auto; display:flex; align-items:center; gap:8px;}
+  .tip-btn{
+    font-family:'JetBrains Mono',monospace; font-size:10.5px; background:rgba(19,28,44,.72); border:1px solid var(--border);
+    color:var(--text-dim); padding:5px 9px; border-radius:999px; cursor:pointer; transition:all .15s ease;
+  }
+  .tip-btn:hover{border-color:var(--teal-dim); color:var(--teal); background:rgba(63,214,192,.08);}
+  .hint-btn .ui-icon{margin-right:4px;}
+  .toast-wrap{position:fixed; right:16px; bottom:16px; z-index:20; display:flex; flex-direction:column; gap:8px;}
+  .toast{font-family:'JetBrains Mono',monospace; font-size:11px; border-radius:10px; padding:10px 12px; border:1px solid var(--border); background:rgba(19,28,44,.95); color:var(--text-dim); box-shadow:0 12px 24px rgba(0,0,0,.22); min-width:220px;}
+  .toast.toast-success{border-color:rgba(63,214,192,.35); color:var(--teal);}
+  .toast.toast-error{border-color:rgba(224,122,95,.38); color:var(--coral);}
+  .toast-main{display:flex; align-items:center; justify-content:space-between; gap:10px;}
+  .toast-action{font-family:'JetBrains Mono',monospace; font-size:10px; border:1px solid var(--border); background:rgba(19,28,44,.75); color:var(--text-dim); border-radius:999px; padding:4px 8px; cursor:pointer;}
+  .toast-action:hover{border-color:var(--teal-dim); color:var(--teal);}
+  .trend-chart{display:grid; gap:10px; margin-top:6px;}
+  .trend-row{display:grid; grid-template-columns:90px 1fr auto; gap:10px; align-items:center;}
+  .trend-label{font-family:'JetBrains Mono',monospace; font-size:10.5px; color:var(--text-faint); text-transform:uppercase;}
+  .trend-bars{display:flex; align-items:flex-end; gap:4px; min-height:44px;}
+  .trend-bar{flex:1; min-width:0; display:flex; align-items:flex-end; justify-content:center; background:rgba(255,255,255,.04); border:1px solid var(--border-soft); border-radius:4px; height:44px; overflow:hidden;}
+  .trend-bar-fill{width:100%; background:linear-gradient(180deg, rgba(63,214,192,.95), rgba(155,140,242,.92)); border-radius:2px 2px 0 0;}
+  .trend-value{font-family:'JetBrains Mono',monospace; font-size:10.5px; color:var(--text-dim); white-space:nowrap;}
+  .shortcuts-overlay{position:fixed; inset:0; z-index:30; background:rgba(8,12,20,.62); backdrop-filter:blur(5px); display:flex; align-items:center; justify-content:center; padding:18px;}
+  .shortcuts-card{width:min(560px, 100%); border:1px solid var(--border); border-radius:14px; background:linear-gradient(180deg, rgba(19,28,44,.98), rgba(15,22,35,.98)); box-shadow:0 24px 48px rgba(0,0,0,.32); padding:18px;}
+  .shortcuts-head{display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:12px;}
+  .shortcuts-title{font-family:'JetBrains Mono',monospace; font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:var(--teal);}
+  .shortcut-list{display:grid; gap:8px;}
+  .shortcut-row{display:flex; align-items:center; justify-content:space-between; gap:10px; border:1px solid var(--border-soft); border-radius:8px; padding:8px 10px; background:rgba(255,255,255,.01);}
+  .shortcut-key{font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--gold);}
+  .shortcut-desc{font-size:12px; color:var(--text-dim);}
+  .focus-mode .dashboard{display:block;}
+  .focus-mode .quick-actions{margin-top:0;}
+  .hint-btn{
+    font-family:'JetBrains Mono',monospace; font-size:10.5px;
+    background:rgba(217,168,81,0.1); border:1px solid rgba(217,168,81,0.3); color:var(--gold);
+    padding:4px 9px; border-radius:6px; cursor:pointer; margin-left:0; white-space:nowrap; transition:all .15s ease; display:inline-flex; align-items:center; gap:4px;
+  }
+  .prob-meta-line{display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-top:5px;}
+  .hint-btn:hover:not(:disabled){background:rgba(217,168,81,0.2);}
+  .hint-btn:disabled{opacity:0.5; cursor:default;}
+  tr.hint-row td{border-bottom:1px solid var(--border-soft); padding:0 8px 10px;}
+  .hint-panel{
+    background:var(--bg-raised); border:1px solid rgba(217,168,81,0.25); border-radius:8px;
+    padding:12px 14px; display:flex; flex-direction:column; gap:8px;
+  }
+  .hint-item{font-size:12.5px; color:var(--text-dim); line-height:1.5;}
+  .hint-num{
+    font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--gold);
+    background:rgba(217,168,81,0.12); padding:2px 7px; border-radius:4px; margin-right:8px;
+    white-space:nowrap;
+  }
+  .compact-mode .table-wrap{border-radius:10px;}
+  .compact-mode tbody td{padding:6px 6px; font-size:12px;}
+  .compact-mode .notes-input,
+  .compact-mode .pattern-field,
+  .compact-mode .company-field{font-size:11.5px;}
+  .compact-mode select.status-select{font-size:11px; padding:5px 6px;}
+  .compact-mode .hint-btn{font-size:10px; padding:3px 7px;}
+  .compact-mode .group-head{padding:14px 18px;}
+  .compact-mode .add-row{margin-top:10px; gap:6px;}
+  .practice-list{display:flex; flex-direction:column; gap:10px; margin-top:10px;}
+  .problem-card{
+    border:1px solid var(--border-soft); border-radius:12px; background:rgba(12,19,31,.32);
+    padding:13px; display:grid; grid-template-columns:minmax(250px, 1.1fr) minmax(300px, .95fr); gap:12px;
+    transition:border-color .15s ease, background .15s ease, transform .15s ease;
+  }
+  .problem-card:hover{border-color:rgba(189,163,255,.42); background:rgba(22,31,49,.46); transform:translateY(-1px);}
+  .problem-main{min-width:0;}
+  .problem-title-row{display:flex; align-items:flex-start; justify-content:space-between; gap:10px; margin-bottom:8px;}
+  .problem-title{font-size:14px; font-weight:700; color:var(--text); line-height:1.35;}
+  .problem-title a{color:inherit; text-decoration:none; border-bottom:1px dotted var(--text-faint);}
+  .problem-title a:hover{color:var(--teal); border-color:var(--teal);}
+  .problem-badges{display:flex; align-items:center; flex-wrap:wrap; gap:7px;}
+  .learning-chip{font-family:var(--font-mono); font-size:10px; color:var(--gold); border:1px solid rgba(217,168,81,.22); border-radius:999px; padding:2px 7px; background:rgba(217,168,81,.07);}
+  .problem-fields{display:grid; grid-template-columns:minmax(150px, 1fr) minmax(120px, .75fr); gap:8px; margin-top:8px;}
+  .field-label{display:block; font-family:var(--font-mono); font-size:9px; letter-spacing:.08em; text-transform:uppercase; color:var(--text-faint); margin-bottom:3px;}
+  .problem-controls{display:grid; grid-template-columns:1fr 1fr auto; gap:8px; align-items:end;}
+  .control-stack{min-width:0;}
+  .problem-actions{display:flex; align-items:center; justify-content:flex-end; gap:6px; padding-bottom:1px;}
+  .problem-notes{grid-column:1 / -1; display:grid; grid-template-columns:1fr minmax(210px, .45fr); gap:10px; align-items:start; border-top:1px solid var(--border-soft); padding-top:10px;}
+  .notes-input{
+    width:100%; min-height:76px; resize:vertical; background:rgba(19,28,44,.62); border:1px solid var(--border-soft);
+    border-radius:10px; color:var(--text-dim); font-size:12.8px; font-family:var(--font-body); padding:9px 10px; line-height:1.45;
+  }
+  .notes-input:focus{outline:none; border-color:var(--teal-dim); box-shadow:0 0 0 3px rgba(189,163,255,.16);}
+  .reflection-prompts{
+    border:1px solid rgba(217,168,81,.18); background:rgba(217,168,81,.06); border-radius:10px;
+    padding:8px 10px; color:var(--text-faint); font-size:11px; line-height:1.45;
+  }
+  .reflection-prompts strong{display:block; color:var(--gold); font-family:var(--font-mono); font-size:9.5px; letter-spacing:.08em; text-transform:uppercase; margin-bottom:4px;}
+  .hint-panel.card-hints{grid-column:1 / -1; margin-top:0;}
+  .compact-mode .practice-list{gap:7px;}
+  .compact-mode .problem-card{padding:10px; grid-template-columns:minmax(260px, 1.2fr) minmax(270px, .8fr);}
+  .compact-mode .problem-notes{display:none;}
+  .compact-mode .problem-title{font-size:13px;}
+  footer{margin-top:22px; padding:18px 0 0; color:var(--text-faint); font-size:12px; text-align:center; font-family:'JetBrains Mono',monospace;}
+  code.inline{background:var(--bg-raised); padding:1px 6px; border-radius:4px; color:var(--gold);}
+
+  /* Fancy typography layer: display headline + mono instrumentation labels. */
+  .eyebrow,
+  .save-indicator,
+  .meta-pill,
+  .ring-label,
+  .pb-row .pname,
+  .pb-row .pcount,
+  .control-label,
+  .search-input,
+  .search-hint,
+  .search-count,
+  .search-clear,
+  .filter-btn,
+  .reset-btn,
+  .quick-title,
+  .quick-btn,
+  .guide-bar,
+  .group-idx,
+  .group-titles .weeks,
+  .mini,
+  .streak-badge,
+  thead th,
+  .prob-topic,
+  .status-pill,
+  .diff-badge,
+  select.status-select,
+  .pattern-field,
+  .company-field,
+  .heat-legend,
+  .revisit-meta,
+  .revisit-solve-btn,
+  .unaided-wrap,
+  .add-row input.pat-input,
+  .add-row select,
+  .add-btn,
+  .notice-bar,
+  .tips-title,
+  .tip-btn,
+  .hint-btn,
+  .hint-num,
+  .toast,
+  .shortcuts-title,
+  .shortcut-key,
+  footer{
+    font-family:var(--font-mono);
+  }
+
+  .ring-num{font-family:var(--font-display); letter-spacing:.01em;}
+
+  /* Neo-brutalist final pass: solid fills only, bold borders, geometric accents. */
+  :root{
+    --nb-bg: #ead7ff;
+    --nb-ink: #111111;
+    --nb-paper: #ffffff;
+    --nb-purple: #b388ff;
+    --nb-lilac: #d3b2ff;
+    --nb-pink: #ffb9dc;
+    --nb-blue: #b7d9ff;
+    --nb-mint: #bff2d8;
+    --nb-peach: #ffd2b3;
+    --nb-yellow: #fff2a8;
+    --nb-shadow: #8756c7;
+    --bg: var(--nb-bg);
+    --bg-raised: var(--nb-paper);
+    --bg-card: var(--nb-blue);
+    --border: var(--nb-ink);
+    --border-soft: var(--nb-shadow);
+    --text: var(--nb-ink);
+    --text-dim: var(--nb-ink);
+    --text-faint: var(--nb-shadow);
+    --teal: var(--nb-mint);
+    --teal-dim: var(--nb-purple);
+    --gold: var(--nb-yellow);
+    --coral: var(--nb-peach);
+    --violet: var(--nb-purple);
+    --blue: var(--nb-blue);
+  }
+
+  body{
+    color-scheme: light;
+    background: var(--nb-bg) !important;
+    color: var(--nb-ink) !important;
+    font-family:'Space Grotesk', sans-serif !important;
+  }
+
+  h1, h2, h3, .section-tab-btn, .group-titles h3{
+    font-family:'Archivo Black', sans-serif !important;
+    letter-spacing:.01em;
+  }
+
+  .quick-title,
+  .section-switcher-label,
+  .panel-title,
+  .ring-label,
+  .control-label,
+  .field-label,
+  .tips-title,
+  .shortcuts-title,
+  .shortcut-key,
+  .revisit-meta,
+  .search-count,
+  .search-hint,
+  .pname,
+  .pcount,
+  .weeks,
+  .mini,
+  footer,
+  .save-indicator,
+  .meta-pill,
+  .status-pill,
+  .diff-badge,
+  .toast,
+  .hint-num,
+  .pattern-field,
+  .company-field,
+  select.status-select{
+    font-family:'IBM Plex Mono', monospace !important;
+  }
+
+  body::before,
+  body::after{
+    filter:none !important;
+    opacity:1 !important;
+    width:160px;
+    height:160px;
+    border:3px solid var(--nb-ink);
+    box-shadow:none;
+    border-radius:0;
+  }
+
+  body::before{
+    left:24px;
+    top:92px;
+    background:var(--nb-yellow);
+    clip-path:polygon(0 0, 100% 0, 100% 70%, 70% 100%, 0 100%);
+  }
+
+  body::after{
+    right:22px;
+    top:360px;
+    background:var(--nb-mint);
+    clip-path:polygon(0 0, 100% 0, 100% 100%, 25% 100%);
+  }
+
+  header,
+  .section-switcher,
+  .controls,
+  .card,
+  .group,
+  .group-body,
+  .problem-card,
+  .problem-stage-head,
+  .control-block,
+  .tips-bar,
+  .notice-bar,
+  .shortcuts-card,
+  .shortcut-row,
+  .toast,
+  .panel-block,
+  .hero-guide,
+  .guide-bar,
+  .table-wrap,
+  .hint-panel,
+  .reflection-prompts,
+  .stat-card,
+  .save-chip,
+  .meta-pill,
+  .save-indicator,
+  .revisit-row,
+  .streak-none,
+  .pattern-chip,
+  .micro-chip,
+  .status-pill,
+  .diff-badge,
+  .learning-chip,
+  .search-input,
+  .search-clear,
+  .filter-btn,
+  .reset-btn,
+  .tip-btn,
+  .quick-btn,
+  .mini-action-btn,
+  .revisit-solve-btn,
+  .toast-action,
+  .hint-btn,
+  .add-btn,
+  select.status-select,
+  .add-row input,
+  .add-row select,
+  .notes-input,
+  .pattern-field,
+  .company-field,
+  .section-tab-btn,
+  .pb-track,
+  .heat-cell{
+    background: var(--nb-lilac) !important;
+    color: var(--nb-ink) !important;
+    border: 3px solid var(--nb-ink) !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+  }
+
+  /* Keep depth only on structural containers, not on dense controls. */
+  header,
+  .section-switcher,
+  .controls,
+  .card,
+  .group,
+  .panel-block,
+  .problem-stage-head,
+  .shortcuts-card,
+  .toast{
+    box-shadow: 2px 2px 0 rgba(135, 86, 199, .32) !important;
+  }
+
+  header{background:var(--nb-purple) !important;}
+  .section-switcher,
+  .controls,
+  .group,
+  .group-body,
+  .panel-block,
+  .table-wrap,
+  .shortcuts-card,
+  .card{
+    background:var(--nb-blue) !important;
+  }
+
+  .card:nth-child(3n),
+  .group:nth-child(3n),
+  .panel-block:nth-child(3n){
+    background:var(--nb-mint) !important;
+  }
+
+  .card:nth-child(2n),
+  .control-block:nth-child(2n),
+  .problem-card:nth-child(2n){
+    background:var(--nb-peach) !important;
+  }
+
+  .problem-card,
+  .problem-stage-head,
+  .shortcut-row,
+  .tips-bar,
+  .notice-bar,
+  .revisit-row,
+  .guide-bar,
+  .hero-guide,
+  .stat-card,
+  .save-chip{
+    background:var(--nb-pink) !important;
+  }
+
+  /* Rotate palette across topic groups and problem cards so the problems tab feels less repetitive. */
+  .list > .group:nth-child(4n+1){background:var(--nb-blue) !important;}
+  .list > .group:nth-child(4n+1) .group-head{background:var(--nb-yellow) !important;}
+  .list > .group:nth-child(4n+2){background:var(--nb-mint) !important;}
+  .list > .group:nth-child(4n+2) .group-head{background:var(--nb-pink) !important;}
+  .list > .group:nth-child(4n+3){background:var(--nb-peach) !important;}
+  .list > .group:nth-child(4n+3) .group-head{background:var(--nb-lilac) !important;}
+  .list > .group:nth-child(4n+4){background:var(--nb-lilac) !important;}
+  .list > .group:nth-child(4n+4) .group-head{background:var(--nb-mint) !important;}
+
+  .list > .group:nth-child(4n+1) .group-idx{background:var(--nb-purple) !important; color:var(--nb-paper) !important;}
+  .list > .group:nth-child(4n+2) .group-idx{background:var(--nb-blue) !important; color:var(--nb-ink) !important;}
+  .list > .group:nth-child(4n+3) .group-idx{background:var(--nb-yellow) !important; color:var(--nb-ink) !important;}
+  .list > .group:nth-child(4n+4) .group-idx{background:var(--nb-pink) !important; color:var(--nb-ink) !important;}
+  .list > .group:nth-child(4n+1) .group-idx.pat{background:var(--nb-purple) !important; color:var(--nb-paper) !important;}
+  .list > .group:nth-child(4n+2) .group-idx.pat{background:var(--nb-blue) !important; color:var(--nb-ink) !important;}
+  .list > .group:nth-child(4n+3) .group-idx.pat{background:var(--nb-yellow) !important; color:var(--nb-ink) !important;}
+  .list > .group:nth-child(4n+4) .group-idx.pat{background:var(--nb-pink) !important; color:var(--nb-ink) !important;}
+
+  .group-body .problem-card:nth-child(6n+1){background:var(--nb-pink) !important;}
+  .group-body .problem-card:nth-child(6n+2){background:var(--nb-peach) !important;}
+  .group-body .problem-card:nth-child(6n+3){background:var(--nb-yellow) !important;}
+  .group-body .problem-card:nth-child(6n+4){background:var(--nb-mint) !important;}
+  .group-body .problem-card:nth-child(6n+5){background:var(--nb-blue) !important;}
+  .group-body .problem-card:nth-child(6n+6){background:var(--nb-lilac) !important;}
+
+  .list > .group .group-head,
+  .group-body .problem-card,
+  .group-body .problem-stage-head{
+    color:var(--nb-ink) !important;
+    border-color:var(--nb-ink) !important;
+  }
+
+  /* Keep overview mini stat cards on explicit punchy colors instead of generic card alternation. */
+  .overview-mini-grid .overview-stat-card.stat-solved{background:var(--nb-mint) !important; border-color:var(--nb-ink) !important;}
+  .overview-mini-grid .overview-stat-card.stat-due{background:var(--nb-pink) !important; border-color:var(--nb-ink) !important;}
+  .overview-mini-grid .overview-stat-card.stat-streak{background:var(--nb-yellow) !important; border-color:var(--nb-ink) !important;}
+  .overview-mini-grid .overview-stat-card.stat-checkpoint{background:var(--nb-blue) !important; border-color:var(--nb-ink) !important;}
+  .overview-mini-grid .overview-stat-card.stat-attempts{background:var(--nb-lilac) !important; border-color:var(--nb-ink) !important;}
+  .overview-mini-grid .overview-stat-card.stat-remaining{background:var(--nb-peach) !important; border-color:var(--nb-ink) !important;}
+  .overview-mini-grid .overview-stat-card .overview-stat-label,
+  .overview-mini-grid .overview-stat-card .overview-stat-value,
+  .overview-mini-grid .overview-stat-card .overview-stat-note{color:var(--nb-ink) !important;}
+
+  .section-tab-btn.active,
+  .filter-btn.active,
+  .quick-btn,
+  .add-btn,
+  .group-idx,
+  .group-idx.pat,
+  .save-indicator.saved,
+  .status-pill.status-solved,
+  .diff-Easy,
+  .pb-fill,
+  .heat-3{
+    background:var(--nb-purple) !important;
+    color:var(--nb-paper) !important;
+  }
+
+  .status-pill.status-attempted,
+  .diff-Medium,
+  .hint-btn,
+  .search-mark,
+  .heat-2{background:var(--nb-yellow) !important;}
+
+  .status-pill.status-revisit,
+  .diff-Hard,
+  .mini-action-btn.danger:hover,
+  .reset-btn.reset-danger:hover,
+  .toast.toast-error,
+  .heat-1{background:var(--nb-peach) !important;}
+
+  .section-switcher-label,
+  .panel-title,
+  .ring-label,
+  .control-label,
+  .field-label,
+  .tips-title,
+  .shortcuts-title,
+  .shortcut-key,
+  .quick-title,
+  .eyebrow,
+  .revisit-meta,
+  .search-count,
+  .search-hint,
+  .pname,
+  .pcount,
+  .weeks,
+  .mini,
+  footer,
+  .save-indicator,
+  .meta-pill,
+  .status-pill,
+  .diff-badge,
+  .guide-bar,
+  .notice-bar,
+  .tips-items,
+  .toast,
+  .shortcut-desc,
+  .hint-num,
+  .empty-hint,
+  .blurb,
+  .revisit-name,
+  .prob-name,
+  .prob-topic,
+  .problem-title,
+  .problem-title a,
+  .search-input,
+  .filter-btn,
+  .reset-btn,
+  .quick-btn,
+  .tip-btn,
+  .add-btn,
+  .mini-action-btn,
+  .toast-action,
+  .revisit-solve-btn,
+  .hint-btn,
+  .pattern-field,
+  .company-field,
+  .notes-input,
+  select.status-select,
+  h1,
+  .sub,
+  h1 span{
+    color: #111111 !important;
+  }
+
+  .section-tab-btn.active,
+  .filter-btn.active,
+  .quick-btn,
+  .add-btn,
+  .group-idx,
+  .group-idx.pat,
+  .save-indicator.saved,
+  .status-pill.status-solved,
+  .diff-Easy,
+  .pb-fill,
+  .heat-3,
+  .toast.toast-success{
+    color:#ffffff !important;
+  }
+
+  .group-head,
+  .problem-title-row,
+  .header-top,
+  .controls,
+  .section-tabs,
+  .dash-grid{
+    position:relative;
+  }
+
+  .group-head::after,
+  .problem-stage-head::after,
+  .section-switcher::after{
+    content:'';
+    position:absolute;
+    top:-13px;
+    right:18px;
+    width:20px;
+    height:20px;
+    background:var(--nb-yellow);
+    border:3px solid var(--nb-ink);
+    transform:rotate(45deg);
+  }
+
+  .card:nth-child(odd){transform:rotate(-0.6deg);}
+  .card:nth-child(even){transform:rotate(0.6deg);}
+  .group:nth-child(odd){transform:translateX(6px);}
+  .group:nth-child(even){transform:translateX(-6px);}
+
+  .group-head:hover,
+  .section-tab-btn:hover,
+  .filter-btn:hover,
+  .reset-btn:hover,
+  .quick-btn:hover,
+  .tip-btn:hover,
+  .search-clear:hover,
+  .mini-action-btn:hover,
+  .revisit-solve-btn:hover,
+  .toast-action:hover{
+    background:var(--nb-mint) !important;
+    transform:none;
+    box-shadow:none !important;
+  }
+
+  .card:hover,
+  .group:hover,
+  .problem-card:hover,
+  .section-switcher:hover,
+  .controls:hover,
+  .panel-block:hover,
+  .shortcuts-card:hover,
+  .toast:hover{
+    box-shadow: 2px 2px 0 rgba(135, 86, 199, .32) !important;
+    border-color: var(--nb-ink) !important;
+  }
+
+  .shortcuts-overlay{
+    background: rgba(179, 136, 255, .45) !important;
+    backdrop-filter:none;
+  }
+
+  .focus-mode .dashboard{display:block !important;}
+
+  /* UX rhythm: unconventional grid, strong hierarchy, still readable. */
+  .page-shell{
+    max-width: 1360px !important;
+    padding: 26px 20px 64px !important;
+  }
+
+  header{
+    padding: 30px 28px 28px !important;
+  }
+
+  .header-top{
+    align-items:flex-start;
+    gap:20px;
+  }
+
+  h1{
+    font-size: clamp(34px, 5.2vw, 58px) !important;
+    line-height: 0.98 !important;
+    max-width: 16ch;
+  }
+
+  .sub{
+    max-width: 70ch;
+    font-size: 15px !important;
+    line-height: 1.45 !important;
+  }
+
+  .section-switcher{
+    padding: 16px !important;
+  }
+
+  .section-tabs{
+    display:grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+  }
+
+  .section-tab-btn{
+    min-height: 54px;
+    font-size: 18px !important;
+    font-weight: 700;
+  }
+
+  .section-tab-btn:nth-child(2){
+    transform: none;
+  }
+
+  .section-tab-btn:nth-child(3){
+    transform: none;
+  }
+
+  .controls{
+    display:grid !important;
+    grid-template-columns: repeat(12, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+    align-items:start;
+  }
+
+  .controls .control-block:nth-child(1){grid-column: span 4;}
+  .controls .control-block:nth-child(2){grid-column: span 4;}
+  .controls .control-block:nth-child(3){grid-column: span 4;}
+  .controls .control-block:nth-child(4){grid-column: span 5;}
+  .controls .control-block:nth-child(5){grid-column: span 7;}
+
+  .control-block{
+    padding: 12px !important;
+  }
+
+  .filter-btn,
+  .reset-btn,
+  .tip-btn,
+  .quick-btn,
+  .search-clear,
+  .mini-action-btn,
+  .revisit-solve-btn,
+  .hint-btn,
+  .toast-action,
+  .add-btn{
+    min-height: 36px;
+    font-weight: 600;
+  }
+
+  .search-input{
+    min-height: 38px;
+    font-size: 13px !important;
+  }
+
+  .dashboard{
+    margin-top: 18px !important;
+    gap: 14px !important;
+  }
+
+  .dash-grid{
+    display:grid !important;
+    grid-template-columns: 1.3fr 0.9fr !important;
+    gap: 12px !important;
+  }
+
+  .dash-grid:nth-child(even){
+    grid-template-columns: 0.95fr 1.25fr !important;
+  }
+
+  .card,
+  .group,
+  .problem-card,
+  .panel-block,
+  .shortcuts-card,
+  .control-block{
+    padding: 14px !important;
+  }
+
+  .group-head{
+    padding: 14px 14px !important;
+    gap: 12px !important;
+  }
+
+  .group-titles h3{
+    letter-spacing: 0;
+    font-size: 20px !important;
+    line-height: 1.05;
+  }
+
+  .group-titles .weeks{
+    font-size: 11px !important;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .problem-card{
+    grid-template-columns: minmax(240px, 1.1fr) minmax(260px, .9fr) !important;
+    gap: 12px !important;
+  }
+
+  .problem-title{
+    font-size: 15px !important;
+    line-height: 1.3;
+  }
+
+  .problem-fields,
+  .problem-controls,
+  .problem-actions,
+  .problem-notes,
+  .add-row{
+    gap: 8px !important;
+  }
+
+  .table-wrap,
+  .problem-notes,
+  .hint-panel,
+  .reflection-prompts{
+    border-width: 2px !important;
+  }
+
+  .list{
+    gap: 12px !important;
+  }
+
+  .quick-actions,
+  .header-meta,
+  .legend,
+  .patterns,
+  .group-micro,
+  .panel-pills{
+    gap: 7px !important;
+  }
+
+  .header-meta{
+    margin-bottom: 16px !important;
+  }
+
+  .quick-actions{
+    margin-top: 0 !important;
+  }
+
+  .micro-chip,
+  .pattern-chip,
+  .learning-chip,
+  .status-pill,
+  .diff-badge{
+    padding: 3px 8px !important;
+  }
+
+  .toast-wrap{
+    right: 12px;
+    bottom: 12px;
+  }
+
+  @media (max-width:980px){
+    .card:nth-child(odd),
+    .card:nth-child(even),
+    .group:nth-child(odd),
+    .group:nth-child(even){
+      transform:none;
+    }
+
+    .section-tabs{
+      grid-template-columns: 1fr !important;
+    }
+
+    .section-tab-btn:nth-child(2),
+    .section-tab-btn:nth-child(3){
+      transform:none;
+    }
+
+    .controls{
+      grid-template-columns: 1fr !important;
+    }
+
+    .controls .control-block:nth-child(1),
+    .controls .control-block:nth-child(2),
+    .controls .control-block:nth-child(3),
+    .controls .control-block:nth-child(4),
+    .controls .control-block:nth-child(5){
+      grid-column:auto;
+    }
+
+    .dash-grid,
+    .overview-hero-grid,
+    .dash-grid:nth-child(even),
+    .problem-card{
+      grid-template-columns: 1fr !important;
+    }
+
+    .overview-mini-grid{
+      grid-template-columns: 1fr !important;
+    }
+  }
+
+  /* Clarity pass: larger aligned controls, no gray text, non-white select menus. */
+  :root{
+    --text-dim:#111111;
+    --text-faint:#111111;
+  }
+
+  .controls{
+    grid-template-columns:repeat(2, minmax(360px, 1fr)) !important;
+    gap:14px !important;
+    align-items:stretch !important;
+  }
+
+  .controls .control-block:nth-child(1),
+  .controls .control-block:nth-child(2),
+  .controls .control-block:nth-child(3),
+  .controls .control-block:nth-child(4),
+  .controls .control-block:nth-child(5){
+    grid-column:auto !important;
+  }
+
+  .controls .control-block.search-wrap{
+    grid-column:1 / -1 !important;
+  }
+
+  .control-block{
+    min-height:102px;
+    padding:16px !important;
+    gap:10px !important;
+    justify-content:flex-start;
+    align-content:flex-start;
+  }
+
+  .control-label,
+  .quick-title,
+  .section-switcher-label,
+  .panel-title,
+  .ring-label,
+  .field-label,
+  .tips-title,
+  .shortcuts-title,
+  .shortcut-key,
+  .revisit-meta,
+  .search-count,
+  .search-hint,
+  .pname,
+  .pcount,
+  .weeks,
+  .mini,
+  .prob-topic,
+  .status-pill,
+  .diff-badge,
+  .empty-hint,
+  .blurb,
+  .notice-bar,
+  .tips-items,
+  .meta-pill,
+  .save-indicator,
+  .sub,
+  h1 span,
+  .problem-stage-meta,
+  .legend span,
+  .heat-legend,
+  .revisit-name,
+  .shortcut-desc,
+  footer{
+    color:#111111 !important;
+    opacity:1 !important;
+  }
+
+  .section-tab-btn,
+  .filter-btn,
+  .reset-btn,
+  .tip-btn,
+  .quick-btn,
+  .add-btn,
+  .mini-action-btn,
+  .revisit-solve-btn,
+  .hint-btn,
+  .toast-action,
+  .search-clear,
+  .search-input,
+  .pattern-field,
+  .company-field,
+  .notes-input,
+  .add-row input,
+  select.status-select{
+    min-height:44px;
+    font-size:14px !important;
+    padding:10px 12px !important;
+  }
+
+  .search-wrap{
+    width:100%;
+    gap:10px !important;
+  }
+
+  .search-input{
+    width:100% !important;
+    min-width:0 !important;
+  }
+
+  .problem-card{
+    grid-template-columns:minmax(360px, 1.2fr) minmax(360px, 1fr) !important;
+    gap:14px !important;
+    padding:18px !important;
+  }
+
+  .problem-fields{
+    grid-template-columns:repeat(2, minmax(180px, 1fr)) !important;
+    gap:10px !important;
+  }
+
+  .problem-controls{
+    grid-template-columns:repeat(3, minmax(140px, 1fr)) !important;
+    gap:10px !important;
+    align-items:end !important;
+  }
+
+  select.status-select{
+    width:100%;
+    font-size:14px !important;
+  }
+
+  select.status-select option,
+  .add-row select option{
+    background:#d3b2ff !important;
+    color:#111111 !important;
+  }
+
+  .add-row{
+    display:grid !important;
+    grid-template-columns:minmax(220px, 1.8fr) minmax(200px, 1.2fr) minmax(180px, 1fr) minmax(180px, 1fr) minmax(210px, 1fr) auto;
+    gap:10px !important;
+    align-items:stretch !important;
+  }
+
+  .difficulty-segment{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:8px;
+    min-height:44px;
+  }
+
+  .seg-btn{
+    min-height:44px;
+    border:3px solid #111111;
+    background:#d3b2ff;
+    color:#111111;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:13px;
+    font-weight:700;
+    cursor:pointer;
+    border-radius:0;
+  }
+
+  .seg-btn.active{
+    background:#b388ff;
+    color:#ffffff;
+  }
+
+  .seg-btn:hover{background:#bff2d8;}
+
+  .add-btn{
+    min-width:170px;
+    justify-self:stretch;
+  }
+
+  @media (max-width:1200px){
+    .controls{grid-template-columns:1fr !important;}
+
+    .controls .control-block:nth-child(1),
+    .controls .control-block:nth-child(2),
+    .controls .control-block:nth-child(3),
+    .controls .control-block:nth-child(4),
+    .controls .control-block:nth-child(5){
+      grid-column:auto !important;
+    }
+
+    .problem-card,
+    .problem-fields,
+    .problem-controls,
+    .add-row{
+      grid-template-columns:1fr !important;
+    }
+
+    .add-btn{min-width:0;}
+  }
+
+  /* Decluttered card UX: summary first, details on demand. */
+  .problem-card{
+    grid-template-columns:1fr !important;
+    gap:12px !important;
+    padding:16px !important;
+  }
+
+  .problem-main{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+  }
+
+  .problem-controls.compact-controls{
+    display:flex !important;
+    align-items:center;
+    justify-content:flex-start;
+    gap:10px !important;
+    border-top:3px solid #111111;
+    padding-top:12px;
+  }
+
+  .problem-summary{
+    font-size:14px;
+    line-height:1.65;
+    color:#111111;
+    border-left:3px solid #111111;
+    padding-left:10px;
+    margin-top:2px;
+  }
+
+  .problem-summary-line,
+  .problem-desc-line,
+  .problem-intent-line{
+    display:block;
+  }
+
+  .problem-summary-line{
+    font-size:14px;
+    font-weight:600;
+  }
+
+  .problem-desc-line{
+    margin-bottom:4px;
+    font-size:14px;
+    font-weight:700;
+  }
+
+  .problem-intent-line{
+    margin-top:4px;
+    font-size:14px;
+    font-weight:700;
+  }
+
+  .problem-summary-label{
+    font-weight:800;
+  }
+
+  .problem-primary-actions{
+    display:flex !important;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:8px !important;
+    width:100%;
+  }
+
+  .row-primary-btn,
+  .row-secondary-btn{
+    border:3px solid #111111;
+    border-radius:0;
+    min-height:40px;
+    padding:8px 12px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    font-weight:700;
+    cursor:pointer;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:6px;
+    transition:transform .12s ease, box-shadow .12s ease, background .12s ease;
+  }
+
+  .row-primary-btn{
+    background:#bff2d8;
+    color:#111111;
+  }
+
+  .row-secondary-btn{
+    background:#d3b2ff;
+    color:#111111;
+  }
+
+  .row-primary-btn:hover,
+  .row-secondary-btn:hover{
+    transform:translateY(-1px);
+    box-shadow:0 3px 0 #111111;
+  }
+
+  .row-secondary-btn.active,
+  .details-toggle-btn.active{
+    background:#b388ff !important;
+    color:#ffffff !important;
+  }
+
+  .row-primary-btn .ui-icon,
+  .row-secondary-btn .ui-icon,
+  .hint-btn .ui-icon,
+  .add-btn .ui-icon{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    margin-right:0;
+    flex-shrink:0;
+  }
+
+  .row-primary-btn svg,
+  .row-secondary-btn svg{
+    width:16px !important;
+    height:16px !important;
+    stroke-width:2.4 !important;
+  }
+
+  .toast-copy{
+    min-width:0;
+  }
+
+  .toast-head{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    font-weight:700;
+    line-height:1.2;
+  }
+
+  .toast-message{
+    display:inline-block;
+  }
+
+  .toast-detail{
+    margin-top:6px;
+    font-size:12px;
+    line-height:1.35;
+    max-width:340px;
+    color:#111111 !important;
+    white-space:normal;
+  }
+
+  .problem-details{
+    border-top:3px solid #111111;
+    padding-top:12px;
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+  }
+
+  .problem-details .problem-fields{
+    display:grid;
+    grid-template-columns:repeat(2, minmax(220px, 1fr)) !important;
+    gap:10px !important;
+  }
+
+  .problem-detail-actions{
+    display:flex;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:8px;
+  }
+
+  .detail-chip-btn{
+    border:2px solid #111111;
+    border-radius:0;
+    background:#f4d8ff;
+    color:#111111;
+    min-height:34px;
+    padding:6px 10px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    font-weight:700;
+    cursor:pointer;
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+  }
+
+  .detail-chip-btn.active{
+    background:#bff2d8;
+  }
+
+  .detail-chip-btn.danger{
+    background:#ffc7d9;
+  }
+
+  .detail-chip-btn:hover{
+    transform:translateY(-1px);
+  }
+
+  .detail-solve-type{
+    max-width:280px;
+  }
+
+  .problem-details .problem-notes{
+    grid-column:1 / -1;
+    display:grid !important;
+    grid-template-columns:1fr 1fr;
+    gap:12px !important;
+    border-top:none !important;
+    padding-top:0 !important;
+    margin-top:0;
+  }
+
+  .problem-details .reflection-prompts{
+    min-height:100%;
+  }
+
+  @media (max-width:980px){
+    .problem-controls.compact-controls{
+      align-items:stretch;
+    }
+
+    .problem-primary-actions{
+      width:100%;
+    }
+
+    .problem-details,
+    .problem-details .problem-fields,
+    .problem-details .problem-notes{
+      grid-template-columns:1fr !important;
+    }
+
+    .detail-solve-type{
+      max-width:none;
+    }
+  }
+
+  /* Final alignment + readability lock */
+  .section-tabs{
+    display:grid !important;
+    grid-template-columns:repeat(3, minmax(0, 1fr)) !important;
+    align-items:stretch !important;
+    gap:12px !important;
+  }
+
+  .section-tab-btn,
+  .section-tab-btn:nth-child(2),
+  .section-tab-btn:nth-child(3){
+    width:100% !important;
+    min-height:58px !important;
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+    text-align:center !important;
+    transform:none !important;
+    margin:0 !important;
+    padding:0 12px !important;
+    font-family:'Bungee', 'Archivo Black', sans-serif !important;
+    font-size:17px !important;
+    letter-spacing:.01em !important;
+    line-height:1.1 !important;
+    font-weight:400 !important;
+  }
+
+  .field-label,
+  .control-label{
+    font-family:'Archivo Black', 'Space Grotesk', sans-serif !important;
+    font-size:12px !important;
+    font-weight:900 !important;
+    letter-spacing:.04em !important;
+    line-height:1.2 !important;
+    margin-bottom:6px !important;
+    color:#111111 !important;
+    opacity:1 !important;
+  }
+
+  .pattern-field,
+  .company-field,
+  select.status-select,
+  .notes-input{
+    font-family:'Space Grotesk', sans-serif !important;
+    font-size:15px !important;
+    font-weight:700 !important;
+    color:#111111 !important;
+  }
+
+  .study-timer{
+    border:3px solid #111111 !important;
+    background:#ffffff !important;
+    border-radius:0 !important;
+    gap:10px !important;
+  }
+
+  .timer-preset-btn,
+  .timer-control-btn{
+    border:3px solid #111111 !important;
+    border-radius:0 !important;
+  }
+
+  @media (max-width:980px){
+    .study-timer{
+      align-items:flex-start;
+    }
+
+    .timer-controls{
+      margin-left:0;
+      width:100%;
+    }
+  }
+
+  @media (max-width:980px){
+    .section-tabs{
+      grid-template-columns:1fr !important;
+    }
+  }
+
+  /* Visual parity after cleanup: preserve the prior interaction feel. */
+  .search-input:focus,
+  select.status-select:focus,
+  .add-row input:focus,
+  .add-row select:focus,
+  .notes-input:focus{
+    border-color: var(--nb-purple) !important;
+    box-shadow: 0 0 0 3px rgba(179, 136, 255, .18) !important;
+  }
+
+  .group-head:hover,
+  .filter-btn:hover,
+  .quick-btn:hover,
+  .tip-btn:hover,
+  .mini-action-btn:hover,
+  .revisit-solve-btn:hover{
+    box-shadow: 0 0 0 2px rgba(179, 136, 255, .12) inset !important;
+  }
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel" data-presets="react">
+const { useState, useEffect, useCallback, useMemo, useRef } = React;
+
+const PATTERN_SUGGESTIONS = [
+  "Prefix Sum","Kadane's Algorithm","Two Pointers","Sliding Window","Binary Search",
+  "Binary Search on Answer","Fast-Slow Pointers","In-place Reversal","Monotonic Stack",
+  "Backtracking (Subsets/Permutations)","DFS/BFS Traversal","Union-Find","Topological Sort",
+  "Dijkstra / Shortest Path","Top-K / Heap","Two Heaps","1D DP","2D DP / Knapsack",
+  "LIS / LCS","Interval Merging","Trie","Bit Manipulation / XOR"
+];
+
+const COMPANY_SUGGESTIONS = [
+  "Razorpay","PhonePe","CRED","Juspay","Amazon","Google","Flipkart","Swiggy","Zomato","Other"
+];
+
+const PHASE_DEFS = [
+  { id:'setup', title:'Setup & Recursion Refresh', weeks:'Week 1 (Days 1–3)',
+    patterns:['Time/space complexity','Recursion basics','Java Collections refresher'],
+    blurb:"Not a topic — a warm-up. Re-derive Big-O by hand, refresh recursion, get comfortable with ArrayList/HashMap/HashSet/Deque again." },
+  { id:'arrays', title:'Arrays & Hashing', weeks:'Week 1–2',
+    patterns:['Prefix Sum',"Kadane's Algorithm",'Frequency Maps','Sorting-based tricks'],
+    blurb:"The most common starting topic on every sheet. Get fluent with hash maps for O(1) lookups before anything else." },
+  { id:'twoptr', title:'Two Pointers & Sliding Window', weeks:'Week 2–3',
+    patterns:['Fixed Window','Variable Window','Opposite-direction Pointers'],
+    blurb:"This pattern family shows up disguised in dozens of problems. Worth over-practicing early." },
+  { id:'binsearch', title:'Binary Search', weeks:'Week 3',
+    patterns:['Search space reduction','Binary Search on Answer','Rotated/2D arrays'],
+    blurb:'The interview version is "binary search on the answer" — recognizing when a problem secretly wants a binary search over a range of possible answers.' },
+  { id:'strings', title:'Strings', weeks:'Week 4',
+    patterns:['Pattern matching','Anagrams','Palindromes'],
+    blurb:"Mostly hashing + two pointers applied to characters. Direct carryover to your day job's string parsing." },
+  { id:'linkedlist', title:'Linked List', weeks:'Week 5',
+    patterns:['Fast-Slow Pointers','In-place Reversal','Cycle detection'],
+    blurb:"A small, closed pattern set — once fast/slow and reversal are solid, most problems are variations." },
+  { id:'stacks', title:'Stacks & Queues', weeks:'Week 6',
+    patterns:['Monotonic Stack','Next greater/smaller element'],
+    blurb:"Monotonic stack feels like a trick the first time, then becomes instant-recognition after 4–5 problems." },
+  { id:'recursion', title:'Recursion & Backtracking', weeks:'Week 7',
+    patterns:['Subsets','Permutations','Combinations','N-Queens-style pruning'],
+    blurb:"The template is nearly identical across problems: choose → explore → un-choose." },
+  { id:'trees', title:'Trees & BST', weeks:'Week 8–9',
+    patterns:['DFS/BFS Traversal','LCA','BST validate/insert'],
+    blurb:"Biggest topic by problem count on most sheets. Recursive traversal is the base skill." },
+  { id:'heaps', title:'Heaps / Priority Queue', weeks:'Week 9',
+    patterns:['Top-K / Heap','Two Heaps','Merge K sorted lists'],
+    blurb:"Java's PriorityQueue makes syntax easy — the hard part is recognizing the pattern from the phrasing." },
+  { id:'graphs', title:'Graphs', weeks:'Week 10–11',
+    patterns:['DFS/BFS Traversal','Union-Find','Topological Sort','Dijkstra / Shortest Path'],
+    blurb:"The topic most people are rustiest on after a break — budget extra time here." },
+  { id:'dp', title:'Dynamic Programming', weeks:'Week 12–13',
+    patterns:['1D DP','2D DP / Knapsack','LIS / LCS'],
+    blurb:"Always write the brute-force recursive solution first, then memoize, then tabulate." },
+  { id:'greedy', title:'Greedy & Intervals', weeks:'Week 14',
+    patterns:['Interval Merging','Activity selection'],
+    blurb:'Practice articulating why the greedy choice is correct, not just coding it.' },
+  { id:'trie-bits', title:'Tries & Bit Manipulation', weeks:'Week 14',
+    patterns:['Trie','Bit Manipulation / XOR'],
+    blurb:"Smallest topic by volume — a handful of problems each is enough." },
+  { id:'revision', title:'Revision, Contests & Mocks', weeks:'Week 15+',
+    patterns:['Company-tagged practice','Timed contests','Mock interviews'],
+    blurb:"Spine is done — now it's reps under pressure and revisiting every 'revisit'-flagged problem." },
+];
+
+const PHASE_MAP = Object.fromEntries(PHASE_DEFS.map(p => [p.id, p]));
+const PHASE_ORDER = Object.fromEntries(PHASE_DEFS.map((p, index) => [p.id, index]));
+const uid = () => 'x' + Math.random().toString(36).slice(2, 10);
+const emptyPhases = () => Object.fromEntries(PHASE_DEFS.map(p => [p.id, []]));
+
+const DIFFICULTY_ORDER = { Easy: 0, Medium: 1, Hard: 2 };
+
+function sortPracticeItems(a, b){
+  const diff = (DIFFICULTY_ORDER[a.difficulty] ?? 99) - (DIFFICULTY_ORDER[b.difficulty] ?? 99);
+  if(diff !== 0) return diff;
+  const patternDiff = (a.pattern || '').localeCompare(b.pattern || '');
+  if(patternDiff !== 0) return patternDiff;
+  return (a.name || '').localeCompare(b.name || '');
+}
+
+function sortPracticeEntries(a, b){
+  const itemDiff = sortPracticeItems(a.item, b.item);
+  if(itemDiff !== 0) return itemDiff;
+  return (PHASE_ORDER[a.phaseId] ?? 99) - (PHASE_ORDER[b.phaseId] ?? 99);
+}
+
+function statusLabel(s){
+  return {'not-started':'Not started','attempted':'Attempted','solved':'Solved','revisit':'Revisit'}[s] || s;
+}
+
+function statusIconName(s){
+  return {'not-started':'circle','attempted':'half','solved':'check','revisit':'refresh'}[s] || 'circle';
+}
+
+function inferProblemIntent(problemName, rules){
+  const name = (problemName || '').trim().toLowerCase();
+  if(!name) return 'define clear input-state transitions before coding';
+  const intents = [];
+  (Array.isArray(rules) ? rules : []).forEach(rule => {
+    if(!rule || typeof rule.intent !== 'string') return;
+    const priority = Number.isFinite(rule.priority) ? rule.priority : 0;
+    const keywords = Array.isArray(rule.keywords) ? rule.keywords : [];
+    let bestKeywordLength = 0;
+    const matched = keywords.some(keyword => {
+      if(typeof keyword !== 'string') return false;
+      const key = keyword.trim().toLowerCase();
+      const hit = key && name.includes(key);
+      if(hit) bestKeywordLength = Math.max(bestKeywordLength, key.length);
+      return hit;
+    });
+    if(matched){
+      intents.push({
+        intent: rule.intent,
+        score: (priority * 100) + bestKeywordLength
+      });
+    }
+  });
+  if(intents.length === 0) return 'break the statement into conditions, transitions, and edge cases';
+  const unique = [];
+  intents
+    .sort((a, b) => b.score - a.score)
+    .forEach(entry => {
+      if(!unique.some(x => x.intent === entry.intent)) unique.push(entry);
+    });
+  return unique.slice(0, 2).map(x => x.intent).join(' and ');
+}
+
+function Icon({name, size=12, stroke='currentColor'}){
+  const common = { width: size, height: size, viewBox: '0 0 24 24', fill: 'none', stroke, strokeWidth: 2.2, strokeLinecap: 'round', strokeLinejoin: 'round', 'aria-hidden': true };
+  if(name === 'check') return <span className="ui-icon"><svg {...common}><path d="M20 6 9 17l-5-5" /></svg></span>;
+  if(name === 'refresh') return <span className="ui-icon"><svg {...common}><path d="M21 12a9 9 0 1 1-2.64-6.36" /><path d="M21 3v6h-6" /></svg></span>;
+  if(name === 'undo') return <span className="ui-icon"><svg {...common}><path d="M9 14 4 9l5-5" /><path d="M20 20a8 8 0 0 0-8-8H4" /></svg></span>;
+  if(name === 'external') return <span className="ui-icon"><svg {...common}><path d="M14 4h6v6" /><path d="M10 14 20 4" /><path d="M20 14v6H4V4h6" /></svg></span>;
+  if(name === 'half') return <span className="ui-icon"><svg {...common}><circle cx="12" cy="12" r="8" /><path d="M12 4a8 8 0 0 1 0 16" /></svg></span>;
+  if(name === 'search') return <span className="ui-icon"><svg {...common}><circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" /></svg></span>;
+  if(name === 'zap') return <span className="ui-icon"><svg {...common}><path d="M13 2 4 14h6l-1 8 9-12h-6z" /></svg></span>;
+  if(name === 'target') return <span className="ui-icon"><svg {...common}><circle cx="12" cy="12" r="8" /><circle cx="12" cy="12" r="3" /><path d="M12 2v2M12 20v2M2 12h2M20 12h2" /></svg></span>;
+  if(name === 'plus') return <span className="ui-icon"><svg {...common}><path d="M12 5v14M5 12h14" /></svg></span>;
+  if(name === 'trash') return <span className="ui-icon"><svg {...common}><path d="M4 7h16" /><path d="M9 7V4h6v3" /><rect x="6" y="7" width="12" height="13" rx="2" /><path d="M10 11v6M14 11v6" /></svg></span>;
+  if(name === 'info') return <span className="ui-icon"><svg {...common}><circle cx="12" cy="12" r="9" /><path d="M12 16v-4" /><path d="M12 8h.01" /></svg></span>;
+  if(name === 'keyboard') return <span className="ui-icon"><svg {...common}><rect x="3" y="6" width="18" height="12" rx="2" /><path d="M7 10h.01M11 10h.01M15 10h.01M7 14h10" /></svg></span>;
+  if(name === 'bulb') return <span className="ui-icon"><svg {...common}><path d="M9 18h6" /><path d="M10 22h4" /><path d="M8 14a6 6 0 1 1 8 0c-1.1 1.1-1.7 2-2 4h-4c-.3-2-1-2.9-2-4Z" /></svg></span>;
+  return <span className="ui-icon"><svg {...common}><circle cx="12" cy="12" r="8" /></svg></span>;
+}
+
+function matchesSearch(item, query){
+  if(!query) return true;
+  const q = query.trim().toLowerCase();
+  if(!q) return true;
+  const hay = [item.name, item.description, item.pattern, item.company, item.notes, item.learningGoal, item.triggerQuestion, item.pitfall, item.difficulty, item.status]
+    .filter(Boolean)
+    .join(' | ')
+    .toLowerCase();
+  return hay.includes(q);
+}
+
+function escapeRegExp(value){
+  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+function renderHighlightedText(text, query){
+  const source = text || '';
+  const q = (query || '').trim();
+  if(!q) return source;
+  const parts = source.split(new RegExp(`(${escapeRegExp(q)})`, 'ig'));
+  if(parts.length <= 1) return source;
+  return parts.map((part, index) => (
+    part.toLowerCase() === q.toLowerCase()
+      ? <mark key={index} className="search-mark">{part}</mark>
+      : <React.Fragment key={index}>{part}</React.Fragment>
+  ));
+}
+
+const UI_PREFS_KEY = 'dsa-tracker-ui-prefs-v1';
+const TIPS_DISMISSED_KEY = 'dsa-tracker-tips-dismissed-v1';
+const TIMER_PRESET_MINUTES = [5, 10, 30, 45, 60];
+const SESSION_PRESETS = {
+  '15': { label: '15 min', dueLimit: 1, warmupLimit: 1, mediumLimit: 1, hardLimit: 0, maxItems: 3 },
+  '30': { label: '30 min', dueLimit: 2, warmupLimit: 1, mediumLimit: 2, hardLimit: 1, maxItems: 5 },
+  '60': { label: '60 min', dueLimit: 3, warmupLimit: 2, mediumLimit: 3, hardLimit: 1, maxItems: 7 }
+};
+
+function formatTimerClock(totalSeconds){
+  const safe = Math.max(0, Math.floor(totalSeconds || 0));
+  const hours = Math.floor(safe / 3600);
+  const minutes = Math.floor((safe % 3600) / 60);
+  const seconds = safe % 60;
+  if(hours > 0) return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+  return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+}
+
+function readUiPrefs(){
+  if(typeof window === 'undefined' || !window.localStorage) return {};
+  try{
+    const raw = window.localStorage.getItem(UI_PREFS_KEY);
+    if(!raw) return {};
+    const parsed = JSON.parse(raw);
+    return parsed && typeof parsed === 'object' ? parsed : {};
+  }catch(_err){
+    return {};
+  }
+}
+
+function writeUiPrefs(next){
+  if(typeof window === 'undefined' || !window.localStorage) return;
+  try{
+    window.localStorage.setItem(UI_PREFS_KEY, JSON.stringify(next));
+  }catch(_err){}
+}
+
+function readTipsDismissed(){
+  if(typeof window === 'undefined' || !window.localStorage) return false;
+  try{
+    return window.localStorage.getItem(TIPS_DISMISSED_KEY) === '1';
+  }catch(_err){
+    return false;
+  }
+}
+
+function writeTipsDismissed(value){
+  if(typeof window === 'undefined' || !window.localStorage) return;
+  try{
+    window.localStorage.setItem(TIPS_DISMISSED_KEY, value ? '1' : '0');
+  }catch(_err){}
+}
+
+// Streak = trailing consecutive unaided solves, ordered by when each was solved.
+function computeStreak(items){
+  const solved = items
+    .filter(i => i.status === 'solved')
+    .sort((a,b) => (a.solvedAt||a.createdAt||0) - (b.solvedAt||b.createdAt||0));
+  let streak = 0;
+  for(let i = solved.length - 1; i >= 0; i--){
+    if(solved[i].unaided) streak++; else break;
+  }
+  return { streak, solvedCount: solved.length };
+}
+
+function StreakBadge({streak}){
+  if(streak.solvedCount === 0) return <span className="streak-badge streak-none">not started</span>;
+  if(streak.streak >= 3) return <span className="streak-badge streak-ready">✓ ready — {streak.streak} unaided in a row</span>;
+  return <span className="streak-badge streak-progress">{streak.streak}/3 unaided in a row</span>;
+}
+
+const DAY_MS = 86400000;
+
+function flattenPhases(phases){
+  const out = [];
+  Object.entries(phases).forEach(([phaseId, items]) => items.forEach(item => out.push({ item, phaseId })));
+  return out;
+}
+
+function safeSlugFromLink(link){
+  if(!link || typeof link !== 'string') return '';
+  try{
+    const p = new URL(link).pathname.split('/').filter(Boolean);
+    const idx = p.indexOf('problems');
+    if(idx >= 0 && p[idx+1]) return `lc:${p[idx+1]}`;
+  }catch(_err){}
+  return '';
+}
+
+function canonicalIdForItem(item){
+  if(item.canonicalProblemId) return item.canonicalProblemId;
+  const slug = safeSlugFromLink(item.link);
+  if(slug) return slug;
+  return `name:${(item.name || '').trim().toLowerCase().replace(/\s+/g, ' ')}`;
+}
+
+function normalizeItem(item){
+  const next = { ...item };
+  next.description = typeof next.description === 'string' ? next.description.trim() : '';
+  next.canonicalProblemId = canonicalIdForItem(next);
+  next.attemptsCount = Number.isFinite(next.attemptsCount) ? next.attemptsCount : 0;
+  next.lastAttemptAt = next.lastAttemptAt || null;
+  next.firstAcceptedAt = next.firstAcceptedAt || null;
+  next.reviewIntervalDays = Number.isFinite(next.reviewIntervalDays) ? next.reviewIntervalDays : 1;
+  next.easeScore = Number.isFinite(next.easeScore) ? next.easeScore : 2.5;
+  next.nextReviewAt = next.nextReviewAt || null;
+  next.struggledMinutes = Number.isFinite(next.struggledMinutes) ? next.struggledMinutes : 0;
+  next.solutionType = next.solutionType || (next.unaided ? 'unaided' : 'unknown');
+  next.history = Array.isArray(next.history) ? next.history : [];
+  return next;
+}
+
+function appendHistoryEntry(item, type, detail, at){
+  const history = Array.isArray(item.history) ? item.history.slice(-19) : [];
+  history.push({ type, detail, at });
+  return { ...item, history };
+}
+
+function normalizeAppData(raw){
+  const report = {
+    canonicalBackfilled: 0,
+    idsRepaired: 0,
+    invalidStatusFixed: 0,
+    invalidDifficultyFixed: 0,
+    malformedHintsFixed: 0,
+    unknownPhasesDropped: 0
+  };
+  const phases = emptyPhases();
+  const sourcePhases = raw && raw.phases && typeof raw.phases === 'object' ? raw.phases : {};
+  const unknownPhaseKeys = Object.keys(sourcePhases).filter(k => !PHASE_MAP[k]);
+  report.unknownPhasesDropped = unknownPhaseKeys.length;
+
+  const seenIds = new Set();
+  const validStatuses = new Set(['not-started', 'attempted', 'solved', 'revisit']);
+  const validDifficulty = new Set(['Easy', 'Medium', 'Hard']);
+
+  PHASE_DEFS.forEach(def => {
+    const items = Array.isArray(sourcePhases[def.id]) ? sourcePhases[def.id] : [];
+    phases[def.id] = items
+      .filter(x => x && typeof x === 'object')
+      .map(rawItem => {
+        const beforeCanonical = !!rawItem.canonicalProblemId;
+        const item = normalizeItem(rawItem);
+        if(!beforeCanonical && !!item.canonicalProblemId) report.canonicalBackfilled += 1;
+
+        if(!item.id || seenIds.has(item.id)){
+          item.id = uid();
+          report.idsRepaired += 1;
+        }
+        seenIds.add(item.id);
+
+        if(!validStatuses.has(item.status)){
+          item.status = 'not-started';
+          report.invalidStatusFixed += 1;
+        }
+        if(!validDifficulty.has(item.difficulty)){
+          item.difficulty = 'Medium';
+          report.invalidDifficultyFixed += 1;
+        }
+        if(!Array.isArray(item.hints)){
+          item.hints = [];
+          report.malformedHintsFixed += 1;
+        }
+        return item;
+      });
+  });
+  const sourceMeta = raw && raw.meta && typeof raw.meta === 'object' ? raw.meta : {};
+  const milestones = Array.isArray(sourceMeta.milestones)
+    ? sourceMeta.milestones.filter(m => m && Number.isFinite(m.at))
+    : [];
+  const activityLog = Array.isArray(sourceMeta.activityLog)
+    ? sourceMeta.activityLog.filter(entry => entry && Number.isFinite(entry.at) && typeof entry.type === 'string')
+    : [];
+  const problemIntentRules = Array.isArray(sourceMeta.problemIntentRules)
+    ? sourceMeta.problemIntentRules
+      .filter(rule => rule && typeof rule === 'object')
+      .map(rule => ({
+        keywords: Array.isArray(rule.keywords) ? rule.keywords.filter(k => typeof k === 'string' && k.trim()) : [],
+        intent: typeof rule.intent === 'string' ? rule.intent.trim() : '',
+        priority: Number.isFinite(rule.priority) ? rule.priority : 0
+      }))
+      .filter(rule => rule.intent && rule.keywords.length)
+    : [];
+  return {
+    phases,
+    meta: {
+      ...sourceMeta,
+      milestones,
+      activityLog,
+      problemIntentRules
+    },
+    report
+  };
+}
+
+function cloneTrackerData(data){
+  return {
+    phases: JSON.parse(JSON.stringify(data.phases || {})),
+    meta: JSON.parse(JSON.stringify(data.meta || { milestones: [], activityLog: [], problemIntentRules: [] }))
+  };
+}
+
+function appendGlobalActivity(meta, type, detail, at, extra = {}){
+  const activityLog = Array.isArray(meta.activityLog) ? meta.activityLog.slice(-49) : [];
+  activityLog.push({ type, detail, at, ...extra });
+  return { ...meta, activityLog };
+}
+
+function summarizeImportReport(report){
+  if(!report) return '';
+  const parts = [];
+  if(report.idsRepaired) parts.push(`${report.idsRepaired} id repairs`);
+  if(report.canonicalBackfilled) parts.push(`${report.canonicalBackfilled} canonical ids backfilled`);
+  if(report.invalidStatusFixed) parts.push(`${report.invalidStatusFixed} status fixes`);
+  if(report.invalidDifficultyFixed) parts.push(`${report.invalidDifficultyFixed} difficulty fixes`);
+  if(report.malformedHintsFixed) parts.push(`${report.malformedHintsFixed} hint fixes`);
+  if(report.unknownPhasesDropped) parts.push(`${report.unknownPhasesDropped} unknown phases dropped`);
+  return parts.length ? parts.join(' · ') : 'No repairs needed';
+}
+
+function hasImportRepairs(report){
+  if(!report) return false;
+  return Object.values(report).some(v => Number(v) > 0);
+}
+
+function buildIntegrityStats(flat){
+  const canonicalCounts = new Map();
+  let dueReviews = 0;
+  let revisionCount = 0;
+  const nowTs = Date.now();
+  flat.forEach(({ item, phaseId }) => {
+    const key = item.canonicalProblemId || canonicalIdForItem(item);
+    canonicalCounts.set(key, (canonicalCounts.get(key) || 0) + 1);
+    if(item.nextReviewAt && item.nextReviewAt <= nowTs) dueReviews += 1;
+    if(phaseId === 'revision') revisionCount += 1;
+  });
+  let duplicateCanonicalKeys = 0;
+  let duplicateEntries = 0;
+  canonicalCounts.forEach(count => {
+    if(count > 1){
+      duplicateCanonicalKeys += 1;
+      duplicateEntries += count - 1;
+    }
+  });
+  return { duplicateCanonicalKeys, duplicateEntries, dueReviews, revisionCount };
+}
+
+function applyReviewSchedule(item, prevItem, nowTs){
+  const updated = { ...item };
+  const solvedNow = updated.status === 'solved';
+  if(!solvedNow) return updated;
+  const prevInterval = Number.isFinite(prevItem.reviewIntervalDays) ? prevItem.reviewIntervalDays : 1;
+  const prevEase = Number.isFinite(prevItem.easeScore) ? prevItem.easeScore : 2.5;
+  const quality = updated.unaided ? 1 : 0;
+  const easeDelta = quality ? 0.15 : -0.2;
+  const nextEase = Math.max(1.3, Math.min(3.1, prevEase + easeDelta));
+  const nextInterval = prevItem.status !== 'solved'
+    ? 1
+    : Math.max(1, Math.round(prevInterval * (quality ? nextEase : 1.2)));
+  updated.easeScore = nextEase;
+  updated.reviewIntervalDays = nextInterval;
+  updated.nextReviewAt = nowTs + nextInterval * DAY_MS;
+  return updated;
+}
+
+function queueRevisionCopy(phases, originPhaseId, solvedItem){
+  if(originPhaseId === 'revision') return phases;
+  const shouldQueue = !solvedItem.unaided || (solvedItem.attemptsCount || 0) >= 2 || solvedItem.solutionType === 'editorial';
+  if(!shouldQueue) return phases;
+  const revision = phases.revision || [];
+  const alreadyQueued = revision.some(r => r.canonicalProblemId === solvedItem.canonicalProblemId);
+  if(alreadyQueued) return phases;
+  const nowTs = Date.now();
+  const copy = normalizeItem({
+    ...solvedItem,
+    id: uid(),
+    originPhaseId,
+    sourceProblemId: solvedItem.id,
+    status: 'revisit',
+    revisitAt: nowTs,
+    nextReviewAt: solvedItem.nextReviewAt || nowTs,
+    createdAt: nowTs
+  });
+  return { ...phases, revision: [...revision, copy] };
+}
+
+function uniqueProgress(flat){
+  const totalByCanonical = new Map();
+  const solvedByCanonical = new Set();
+  flat.forEach(({ item }) => {
+    const key = item.canonicalProblemId || canonicalIdForItem(item);
+    if(!totalByCanonical.has(key)) totalByCanonical.set(key, item);
+    if(item.status === 'solved') solvedByCanonical.add(key);
+  });
+  const total = totalByCanonical.size;
+  const solved = solvedByCanonical.size;
+  return { total, solved, pct: total ? Math.round((solved / total) * 100) : 0 };
+}
+
+function buildPatternInsights(flat){
+  const map = {};
+  flat.forEach(({ item }) => {
+    const key = (item.pattern || '').trim() || 'Unsorted';
+    if(!map[key]) map[key] = { pattern: key, total: 0, solved: 0, unaidedSolved: 0, revisit: 0 };
+    map[key].total += 1;
+    if(item.status === 'solved'){
+      map[key].solved += 1;
+      if(item.unaided) map[key].unaidedSolved += 1;
+    }
+    if(item.status === 'revisit' || (item.nextReviewAt && item.nextReviewAt <= Date.now())) map[key].revisit += 1;
+  });
+  return Object.values(map)
+    .map(x => {
+      const solvedRate = x.total ? x.solved / x.total : 0;
+      const unaidedRate = x.solved ? x.unaidedSolved / x.solved : 0;
+      const revisitRate = x.total ? x.revisit / x.total : 0;
+      const weakness = (1 - solvedRate) * 0.55 + (1 - unaidedRate) * 0.35 + revisitRate * 0.1;
+      return { ...x, solvedRate, unaidedRate, weakness };
+    })
+    .sort((a,b) => b.weakness - a.weakness);
+}
+
+function buildDailyPlan(flat, weakPatterns, sessionMode = '30'){
+  const preset = SESSION_PRESETS[sessionMode] || SESSION_PRESETS['30'];
+  const nowTs = Date.now();
+  const dueReviews = flat
+    .filter(({ item }) => item.nextReviewAt && item.nextReviewAt <= nowTs)
+    .sort((a,b) => (a.item.nextReviewAt || 0) - (b.item.nextReviewAt || 0))
+    .slice(0, preset.dueLimit)
+    .map(entry => ({ ...entry, planReason: 'due review' }));
+
+  const weakSet = new Set(weakPatterns.slice(0, 4).map(w => w.pattern));
+  const unsolved = flat.filter(({ item }) => item.status !== 'solved');
+  const easyWarmups = unsolved
+    .filter(({ item }) => item.difficulty === 'Easy')
+    .sort((a,b) => (a.item.createdAt || 0) - (b.item.createdAt || 0))
+    .slice(0, preset.warmupLimit)
+    .map(entry => ({ ...entry, planReason: 'warm-up' }));
+  const mediumFocus = unsolved
+    .filter(({ item }) => item.difficulty === 'Medium' && weakSet.has((item.pattern || '').trim() || 'Unsorted'))
+    .sort((a,b) => (a.item.createdAt || 0) - (b.item.createdAt || 0))
+    .slice(0, preset.mediumLimit)
+    .map(entry => ({ ...entry, planReason: 'weak pattern' }));
+
+  const hardFocus = unsolved
+    .filter(({ item }) => item.difficulty === 'Hard' && (item.status === 'attempted' || item.status === 'revisit'))
+    .sort((a,b) => (b.item.attemptsCount || 0) - (a.item.attemptsCount || 0))
+    .slice(0, preset.hardLimit)
+    .map(entry => ({ ...entry, planReason: 'stretch' }));
+
+  const targetCount = Math.min(preset.maxItems, Math.max(2,
+    dueReviews.length +
+    (easyWarmups.length ? 1 : 0) +
+    (mediumFocus.length ? 2 : 0) +
+    (hardFocus.length ? 1 : 0)
+  ));
+
+  const merged = [...dueReviews, ...easyWarmups, ...mediumFocus, ...hardFocus];
+  const seen = new Set();
+  return merged.filter(({ item }) => {
+    const key = item.canonicalProblemId || item.id;
+    if(seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  }).slice(0, targetCount);
+}
+
+function computeHeatmapWeeks(flat){
+  const solvedTimestamps = flat
+    .map(({ item }) => item.solvedAt)
+    .filter(Boolean)
+    .sort((a,b) => a - b);
+  if(!solvedTimestamps.length) return 12;
+  const spanWeeks = Math.ceil((Date.now() - solvedTimestamps[0]) / DAY_MS / 7);
+  return Math.min(26, Math.max(8, spanWeeks));
+}
+
+function buildMilestoneEntry(flat, nowTs, last){
+  const progress = uniqueProgress(flat);
+  const solved = flat.filter(x => x.item.status === 'solved');
+  const unaidedRate = solved.length ? Math.round((solved.filter(x => x.item.unaided).length / solved.length) * 100) : 0;
+  const patternNow = buildPatternInsights(flat)
+    .map(p => ({ pattern: p.pattern, solvedRate: Number(p.solvedRate.toFixed(3)) }))
+    .reduce((acc, p) => { acc[p.pattern] = p.solvedRate; return acc; }, {});
+
+  let improved = [];
+  let regressed = [];
+  if(last && last.patternRates){
+    const deltas = Object.entries(patternNow)
+      .map(([pattern, rate]) => ({ pattern, delta: rate - (last.patternRates[pattern] || 0) }))
+      .filter(x => Math.abs(x.delta) >= 0.05)
+      .sort((a,b) => b.delta - a.delta);
+    improved = deltas.filter(x => x.delta > 0).slice(0, 3)
+      .map(x => `${x.pattern} +${Math.round(x.delta * 100)}%`);
+    regressed = deltas.filter(x => x.delta < 0).slice(0, 3)
+      .map(x => `${x.pattern} ${Math.round(x.delta * 100)}%`);
+  }
+
+  return {
+    at: nowTs,
+    uniqueSolved: progress.solved,
+    totalUnique: progress.total,
+    unaidedRate,
+    improved,
+    regressed,
+    patternRates: patternNow
+  };
+}
+
+function maybeAppendMilestone(meta, flat, nowTs, force){
+  const milestones = Array.isArray(meta.milestones) ? meta.milestones : [];
+  const last = milestones[milestones.length - 1];
+  if(!force && last && nowTs - last.at < 7 * DAY_MS) return { milestones };
+  const entry = buildMilestoneEntry(flat, nowTs, last);
+  return { milestones: [...milestones, entry].slice(-16) };
+}
+
+function buildHeatmap(flat, weeks){
+  const today = new Date(); today.setHours(0,0,0,0);
+  const counts = {};
+  flat.forEach(({item}) => {
+    if(item.status === 'solved' && item.solvedAt){
+      const d = new Date(item.solvedAt); d.setHours(0,0,0,0);
+      counts[d.getTime()] = (counts[d.getTime()] || 0) + 1;
+    }
+  });
+  const totalDays = weeks * 7;
+  const cells = [];
+  for(let i = totalDays - 1; i >= 0; i--){
+    const d = new Date(today.getTime() - i * DAY_MS);
+    cells.push({ key: d.getTime(), date: d, count: counts[d.getTime()] || 0 });
+  }
+  return cells;
+}
+
+function heatLevel(count){
+  if(count <= 0) return 0;
+  if(count === 1) return 1;
+  if(count === 2) return 2;
+  return 3;
+}
+
+function buildRevisitQueue(flat, limit){
+  const now = Date.now();
+  return flat
+    .filter(e => (e.item.nextReviewAt && e.item.nextReviewAt <= now) || e.item.status === 'revisit')
+    .map(e => ({
+      ...e,
+      daysOverdue: Math.max(0, Math.floor((now - (e.item.nextReviewAt || e.item.revisitAt || e.item.createdAt || now)) / DAY_MS))
+    }))
+    .sort((a, b) => (a.item.nextReviewAt || a.item.revisitAt || a.item.createdAt || 0) - (b.item.nextReviewAt || b.item.revisitAt || b.item.createdAt || 0))
+    .slice(0, limit);
+}
+
+function buildDifficultyProgress(flat){
+  const buckets = {
+    Easy: { label: 'Easy', solved: 0, total: 0 },
+    Medium: { label: 'Medium', solved: 0, total: 0 },
+    Hard: { label: 'Hard', solved: 0, total: 0 }
+  };
+  const seen = new Set();
+  flat.forEach(({ item }) => {
+    const key = item.canonicalProblemId || item.id;
+    if(seen.has(key)) return;
+    seen.add(key);
+    const bucket = buckets[item.difficulty] || buckets.Medium;
+    bucket.total += 1;
+    if(item.status === 'solved') bucket.solved += 1;
+  });
+  return Object.values(buckets).map(bucket => ({
+    ...bucket,
+    pct: bucket.total ? Math.round((bucket.solved / bucket.total) * 100) : 0
+  }));
+}
+
+function computeSolveDayStreak(flat){
+  const solvedDays = new Set(
+    flat
+      .filter(({ item }) => item.status === 'solved' && item.solvedAt)
+      .map(({ item }) => {
+        const date = new Date(item.solvedAt);
+        date.setHours(0,0,0,0);
+        return date.getTime();
+      })
+  );
+  const today = new Date();
+  today.setHours(0,0,0,0);
+  let streak = 0;
+  for(let cursor = today.getTime(); solvedDays.has(cursor); cursor -= DAY_MS){
+    streak += 1;
+  }
+  return streak;
+}
+
+function buildProgressTracker(flat, weakPatterns, revisitQueue, milestones){
+  const progress = uniqueProgress(flat);
+  const nowTs = Date.now();
+  const solvedToday = flat.filter(({ item }) => item.status === 'solved' && item.solvedAt && (nowTs - item.solvedAt) < DAY_MS).length;
+  const solvedLast7 = flat.filter(({ item }) => item.status === 'solved' && item.solvedAt && (nowTs - item.solvedAt) < 7 * DAY_MS).length;
+  const attemptsLast7 = flat.filter(({ item }) => item.lastAttemptAt && (nowTs - item.lastAttemptAt) < 7 * DAY_MS).length;
+  const dueNow = revisitQueue.length;
+  const currentStreak = computeSolveDayStreak(flat);
+  const difficulty = buildDifficultyProgress(flat);
+  const weakestPattern = weakPatterns[0] || null;
+  const strongestPattern = [...weakPatterns]
+    .sort((a, b) => (b.solvedRate - a.solvedRate) || (b.unaidedRate - a.unaidedRate))
+    .find(pattern => pattern.total > 0) || null;
+  const nextCheckpoint = progress.total ? Math.min(progress.total, Math.ceil((progress.solved + 1) / 5) * 5) : 0;
+  const remainingToCheckpoint = nextCheckpoint > progress.solved ? nextCheckpoint - progress.solved : 0;
+  const latestMilestone = Array.isArray(milestones) && milestones.length ? milestones[milestones.length - 1] : null;
+
+  return {
+    ...progress,
+    remaining: Math.max(0, progress.total - progress.solved),
+    solvedToday,
+    solvedLast7,
+    attemptsLast7,
+    dueNow,
+    currentStreak,
+    difficulty,
+    weakestPattern,
+    strongestPattern,
+    nextCheckpoint,
+    remainingToCheckpoint,
+    latestMilestone
+  };
+}
+
+function buildWeeklyTrends(flat){
+  const nowTs = Date.now();
+  const thisWeekStart = nowTs - 7 * DAY_MS;
+  const prevWeekStart = nowTs - 14 * DAY_MS;
+  const inWindow = (ts, start, end) => ts && ts >= start && ts < end;
+  const solvedThisWeek = flat.filter(({ item }) => inWindow(item.solvedAt, thisWeekStart, nowTs)).length;
+  const solvedPrevWeek = flat.filter(({ item }) => inWindow(item.solvedAt, prevWeekStart, thisWeekStart)).length;
+  const attemptsThisWeek = flat.filter(({ item }) => inWindow(item.lastAttemptAt, thisWeekStart, nowTs)).length;
+  const attemptsPrevWeek = flat.filter(({ item }) => inWindow(item.lastAttemptAt, prevWeekStart, thisWeekStart)).length;
+  const unaidedThisWeek = flat.filter(({ item }) => item.unaided && inWindow(item.solvedAt, thisWeekStart, nowTs)).length;
+  const unaidedPrevWeek = flat.filter(({ item }) => item.unaided && inWindow(item.solvedAt, prevWeekStart, thisWeekStart)).length;
+  const rateThisWeek = solvedThisWeek ? Math.round((unaidedThisWeek / solvedThisWeek) * 100) : 0;
+  const ratePrevWeek = solvedPrevWeek ? Math.round((unaidedPrevWeek / solvedPrevWeek) * 100) : 0;
+  const weeklySeries = Array.from({ length: 6 }, (_value, index) => {
+    const end = nowTs - ((5 - index) * 7 * DAY_MS);
+    const start = end - (7 * DAY_MS);
+    return {
+      label: `W${index + 1}`,
+      solves: flat.filter(({ item }) => inWindow(item.solvedAt, start, end)).length,
+      attempts: flat.filter(({ item }) => inWindow(item.lastAttemptAt, start, end)).length
+    };
+  });
+  return {
+    solvedThisWeek,
+    solvedPrevWeek,
+    solvedDelta: solvedThisWeek - solvedPrevWeek,
+    attemptsThisWeek,
+    attemptsPrevWeek,
+    attemptsDelta: attemptsThisWeek - attemptsPrevWeek,
+    rateThisWeek,
+    ratePrevWeek,
+    rateDelta: rateThisWeek - ratePrevWeek,
+    weeklySeries
+  };
+}
+
+function buildPhaseReadiness(phases){
+  return PHASE_DEFS.map(def => {
+    const items = phases[def.id] || [];
+    const total = items.length;
+    const solved = items.filter(item => item.status === 'solved');
+    const solvedRate = total ? solved.length / total : 0;
+    const unaidedRate = solved.length ? solved.filter(item => item.unaided).length / solved.length : 0;
+    const revisitLoad = total ? items.filter(item => item.status === 'revisit').length / total : 0;
+    const lastSolved = solved.reduce((max, item) => Math.max(max, item.solvedAt || 0), 0);
+    const freshness = lastSolved ? Math.max(0, 1 - Math.min(1, (Date.now() - lastSolved) / (21 * DAY_MS))) : 0;
+    const readiness = Math.round(((solvedRate * 0.5) + (unaidedRate * 0.25) + ((1 - revisitLoad) * 0.15) + (freshness * 0.1)) * 100);
+    return {
+      id: def.id,
+      title: def.title,
+      readiness,
+      solved: solved.length,
+      total,
+      revisitCount: items.filter(item => item.status === 'revisit').length,
+      lastSolved
+    };
+  }).sort((a,b) => b.readiness - a.readiness);
+}
+
+function buildRevisionInsights(flat, revisitQueue){
+  const revisionItems = flat.filter(({ phaseId }) => phaseId === 'revision').map(({ item }) => item);
+  const editorialHeavy = flat.filter(({ item }) => item.solutionType === 'editorial').length;
+  const hintHeavy = flat.filter(({ item }) => item.solutionType === 'hint-used').length;
+  const overdueHard = revisitQueue.filter(({ item, daysOverdue }) => item.difficulty === 'Hard' && daysOverdue > 0).length;
+  const retryReady = flat.filter(({ item }) => item.status === 'attempted' && (item.attemptsCount || 0) >= 2).length;
+  const unaidedReady = revisionItems.filter(item => item.unaided && item.status === 'revisit').length;
+  return { revisionItems: revisionItems.length, editorialHeavy, hintHeavy, overdueHard, retryReady, unaidedReady };
+}
+
+function buildRecentActivity(flat, globalActivity, limit){
+  const itemActivity = flat
+    .flatMap(({ item, phaseId }) => (item.history || []).map(entry => ({ ...entry, itemName: item.name, phaseId, canonicalProblemId: item.canonicalProblemId || item.id })))
+    .sort((a,b) => (b.at || 0) - (a.at || 0));
+  const globalEntries = (Array.isArray(globalActivity) ? globalActivity : []).map(entry => ({
+    ...entry,
+    itemName: entry.itemName || 'Tracker',
+    phaseId: entry.phaseId || 'system',
+    canonicalProblemId: entry.canonicalProblemId || `system:${entry.type}:${entry.at}`
+  }));
+  return [...itemActivity, ...globalEntries]
+    .sort((a,b) => (b.at || 0) - (a.at || 0))
+    .slice(0, limit);
+}
+
+function buildNextBestAction(dailyPlan, revisitQueue, weakPatterns, tracker){
+  if(revisitQueue.length){
+    const first = revisitQueue[0];
+    return {
+      title: 'Close one due review',
+      detail: `${first.item.name} is ${first.daysOverdue === 0 ? 'due today' : `${first.daysOverdue}d overdue`} in ${PHASE_MAP[first.phaseId] ? PHASE_MAP[first.phaseId].title : first.phaseId}.`,
+      ctaLabel: 'Open due problem',
+      actionKey: 'focus_problem',
+      target: { phaseId: first.phaseId, itemId: first.item.id }
+    };
+  }
+  const weakPlan = dailyPlan.find(entry => entry.planReason === 'weak pattern');
+  if(weakPlan && tracker.weakestPattern){
+    return {
+      title: 'Attack the weakest pattern',
+      detail: `${tracker.weakestPattern.pattern} is your top pressure signal. ${weakPlan.item.name} is the best current medium-focus pick.`,
+      ctaLabel: 'Open target problem',
+      actionKey: 'focus_problem',
+      target: { phaseId: weakPlan.phaseId, itemId: weakPlan.item.id }
+    };
+  }
+  return {
+    title: 'Push the next checkpoint',
+    detail: tracker.remainingToCheckpoint ? `${tracker.remainingToCheckpoint} more unique solve${tracker.remainingToCheckpoint === 1 ? '' : 's'} to reach ${tracker.nextCheckpoint}.` : 'You have reached your current checkpoint. Time to raise the bar.',
+    ctaLabel: dailyPlan[0] ? 'Open suggested problem' : 'Open problems',
+    actionKey: dailyPlan[0] ? 'focus_problem' : 'open_problems',
+    target: dailyPlan[0] ? { phaseId: dailyPlan[0].phaseId, itemId: dailyPlan[0].item.id } : null
+  };
+}
+
+function formatDateShort(ts){
+  if(!ts) return 'none';
+  return new Date(ts).toLocaleDateString();
+}
+
+function groupMicroStats(items){
+  const total = items.length;
+  const solved = items.filter(i => i.status === 'solved');
+  const unaided = solved.filter(i => i.unaided).length;
+  const attempts = items.reduce((acc, i) => acc + (i.attemptsCount || 0), 0);
+  const avgAttempts = total ? (attempts / total).toFixed(1) : '0.0';
+  const lastSolvedTs = solved.reduce((max, i) => Math.max(max, i.solvedAt || 0), 0);
+  const unaidedRate = solved.length ? Math.round((unaided / solved.length) * 100) : 0;
+  return { avgAttempts, unaidedRate, lastSolvedTs };
+}
+
+function addUniqueHint(hints, text, generated){
+  const cleaned = (text || '').trim();
+  if(!cleaned) return;
+  if(hints.some(h => h.text.toLowerCase() === cleaned.toLowerCase())) return;
+  hints.push({ text: cleaned, generated: !!generated });
+}
+
+function generateFallbackHints(item){
+  const out = [];
+  const pattern = (item.pattern || '').toLowerCase();
+
+  if(pattern.includes('sliding window')){
+    addUniqueHint(out, 'Try to keep a moving window and update answer only when constraints are valid.', true);
+    addUniqueHint(out, 'What condition makes you move left pointer vs expand right pointer?', true);
+  }
+  if(pattern.includes('two pointers')){
+    addUniqueHint(out, 'Start pointers from opposite ends (or same side) and move the one that improves feasibility.', true);
+  }
+  if(pattern.includes('binary search')){
+    addUniqueHint(out, 'Define a monotonic condition and binary-search the first value that satisfies it.', true);
+  }
+  if(pattern.includes('dp')){
+    addUniqueHint(out, 'Write the recursion first: state, transition, and base case; then memoize/tabulate.', true);
+  }
+  if(pattern.includes('graph') || pattern.includes('bfs') || pattern.includes('dfs')){
+    addUniqueHint(out, 'Model as nodes + edges, then choose BFS for shortest layers or DFS for exhaustive traversal.', true);
+  }
+  if(pattern.includes('heap')){
+    addUniqueHint(out, 'Track only the top candidates you need instead of sorting everything.', true);
+  }
+  if(pattern.includes('stack')){
+    addUniqueHint(out, 'Ask what invariant the stack should keep (monotonic increasing/decreasing).', true);
+  }
+  if(pattern.includes('prefix')){
+    addUniqueHint(out, 'Store cumulative information so each query becomes O(1) using differences.', true);
+  }
+
+  addUniqueHint(out, 'Work through the smallest non-trivial example and list what changes at each step.', true);
+  addUniqueHint(out, 'Identify the target time complexity first; that usually reveals the intended pattern.', true);
+  addUniqueHint(out, 'If stuck, write brute force and ask what repeated work can be cached or skipped.', true);
+  return out;
+}
+
+function buildHintDeck(item, minCount = 3){
+  const deck = [];
+  const manual = Array.isArray(item.hints) ? item.hints : [];
+  manual.forEach(h => addUniqueHint(deck, h, false));
+  const fallback = generateFallbackHints(item);
+  fallback.forEach(h => {
+    if(deck.length < minCount) addUniqueHint(deck, h.text, true);
+  });
+  // Keep a small but useful ladder.
+  return deck.slice(0, Math.max(minCount, deck.length));
+}
+
+function Row({item, phaseId, onUpdate, onDelete, showTopic, searchQuery, onToast, intentRules}){
+  const [hintsShown, setHintsShown] = useState(0);
+  const [showDetails, setShowDetails] = useState(false);
+  const hints = useMemo(() => buildHintDeck(item, 3), [item]);
+  const hasMore = hintsShown < hints.length;
+  const statusOrder = ['not-started', 'attempted', 'solved', 'revisit'];
+  const phaseTitle = PHASE_MAP[phaseId] ? PHASE_MAP[phaseId].title : phaseId;
+
+  const primaryAction = useMemo(() => {
+    if(item.status === 'not-started') return { label: 'Start attempt', status: 'attempted', icon: 'half' };
+    if(item.status === 'attempted') return { label: 'Mark solved', status: 'solved', icon: 'check' };
+    if(item.status === 'revisit') return { label: 'Re-solved', status: 'solved', icon: 'check' };
+    return { label: 'Queue revisit', status: 'revisit', icon: 'refresh' };
+  }, [item.status]);
+
+  const problemIntent = useMemo(() => inferProblemIntent(item.name, intentRules), [item.name, intentRules]);
+  const problemDescription = useMemo(() => {
+    if(item.description && item.description.trim()) return item.description.trim();
+    if(item.name && item.name.trim()) return `${item.name}: identify constraints, choose the right pattern, and cover edge cases.`;
+    return 'Define the exact input-output behavior and edge cases before coding.';
+  }, [item.description, item.name]);
+
+  const problemSummary = useMemo(() => {
+    let statusText = `Good warm-up candidate in ${phaseTitle}.`;
+    if(item.status === 'solved') statusText = item.unaided ? 'Solved unaided. Keep one spaced revisit.' : 'Solved with support. Schedule one clean retry.';
+    else if(item.status === 'attempted') statusText = 'In progress. Note the blocker, then retry in one focused sitting.';
+    else if(item.status === 'revisit') statusText = `Ready for revision in ${phaseTitle}.`;
+
+    let noteText = '';
+    if(item.notes && item.notes.trim()){
+      const note = item.notes.trim();
+      noteText = note.length > 110 ? `${note.slice(0, 107)}...` : note;
+    }
+
+    return {
+      patternText: item.pattern || 'not tagged yet',
+      companyText: item.company || '',
+      statusText,
+      noteText
+    };
+  }, [item.pattern, item.company, item.status, item.unaided, item.notes, phaseTitle]);
+
+  const revealNextHint = () => {
+    if(!hasMore) return;
+    const nextIndex = hintsShown;
+    setHintsShown(nextIndex + 1);
+    if(typeof onToast === 'function'){
+      const nextHint = hints[nextIndex];
+      onToast('success', `Hint ${nextIndex + 1} for ${item.name}`, {
+        detail: nextHint ? nextHint.text : 'No hint text available.',
+        duration: 4500,
+        icon: 'bulb'
+      });
+    }
+  };
+
+  const previewNextHint = () => {
+    if(typeof onToast !== 'function' || !hints.length) return;
+    const nextHint = hints[hintsShown];
+    onToast('success', `Hint preview for ${item.name}`, {
+      detail: nextHint ? nextHint.text : 'No hint text available.',
+      duration: 2200,
+      icon: 'bulb'
+    });
+  };
+
+  const updateStatusWithFeedback = (nextStatus, source = 'action') => {
+    if(item.status === nextStatus){
+      if(typeof onToast === 'function'){
+        onToast('success', `${item.name} is already ${statusLabel(nextStatus)}.`, {
+          duration: 1800,
+          icon: statusIconName(nextStatus)
+        });
+      }
+      return;
+    }
+    onUpdate(phaseId, item.id, { status: nextStatus });
+    if(typeof onToast === 'function'){
+      onToast('success', `${item.name}: ${statusLabel(nextStatus)}`, {
+        detail: source === 'select' ? 'Updated from status dropdown.' : 'Updated from quick action.',
+        duration: 2200,
+        icon: statusIconName(nextStatus)
+      });
+    }
+  };
+
+  const cycleStatus = () => {
+    const current = statusOrder.indexOf(item.status);
+    const nextStatus = statusOrder[(current + 1) % statusOrder.length];
+    updateStatusWithFeedback(nextStatus, 'cycle');
+  };
+
+  const toggleUnaided = () => {
+    const next = !item.unaided;
+    onUpdate(phaseId, item.id, { unaided: next });
+    if(typeof onToast === 'function'){
+      onToast('success', next ? `Unaided enabled for ${item.name}` : `Unaided removed for ${item.name}`, {
+        duration: 2000,
+        icon: next ? 'check' : 'circle'
+      });
+    }
+  };
+
+  const changeSolveType = (nextType) => {
+    const currentType = item.solutionType || 'unknown';
+    if(currentType === nextType) return;
+    onUpdate(phaseId, item.id, { solutionType: nextType });
+    if(typeof onToast === 'function'){
+      onToast('success', `${item.name}: solve type set to ${nextType}.`, {
+        duration: 2100,
+        icon: 'info'
+      });
+    }
+  };
+
+  const openProblemLink = () => {
+    if(!item.link) return;
+    window.open(item.link, '_blank', 'noopener,noreferrer');
+    if(typeof onToast === 'function'){
+      onToast('success', `Opened link for ${item.name}.`, {
+        duration: 1600,
+        icon: 'external'
+      });
+    }
+  };
+
+  const removeProblem = () => {
+    if(!window.confirm(`Remove "${item.name}" from this phase?`)){
+      if(typeof onToast === 'function'){
+        onToast('error', 'Remove cancelled.', { duration: 1400, icon: 'info' });
+      }
+      return;
+    }
+    onDelete(phaseId, item.id);
+  };
+
+  const toggleDetails = () => {
+    setShowDetails(prev => {
+      const next = !prev;
+      if(typeof onToast === 'function'){
+        onToast('success', next ? `Details opened for ${item.name}` : `Details hidden for ${item.name}`, {
+          detail: next ? 'Pattern, company, solve type, and notes are now visible.' : 'Showing compact summary only.',
+          duration: 2600,
+          icon: 'info'
+        });
+      }
+      return next;
+    });
+  };
+
+  return (
+    <div className="problem-card" id={`problem-${item.id}`} tabIndex="-1">
+      <div className="problem-main">
+        <div className="problem-title-row">
+          <div className="problem-title">
+            {item.link
+              ? <a href={item.link} target="_blank" rel="noopener noreferrer">{renderHighlightedText(item.name, searchQuery)}</a>
+              : renderHighlightedText(item.name, searchQuery)}
+          </div>
+          <span className={`diff-badge diff-${item.difficulty}`}>{item.difficulty}</span>
+        </div>
+        <div className="problem-badges">
+          <button
+            type="button"
+            className={`status-pill status-btn status-${item.status}`}
+            onClick={cycleStatus}
+            title="Click to cycle status"
+            aria-label="Cycle status"
+          >
+            {Icon({ name: statusIconName(item.status), size: 11 })} {statusLabel(item.status)}
+          </button>
+          <span className="micro-chip">{item.attemptsCount || 0} attempt{(item.attemptsCount || 0) === 1 ? '' : 's'}</span>
+          {item.pattern && <span className="micro-chip">{item.pattern}</span>}
+          {showTopic && <span className="micro-chip">{PHASE_MAP[phaseId] ? PHASE_MAP[phaseId].title : phaseId}</span>}
+        </div>
+        <p className="problem-summary">
+          <span className="problem-desc-line">Problem: {problemDescription}</span>
+          <span className="problem-summary-line">
+            <span className="problem-summary-label">Pattern:</span> {problemSummary.patternText}.{' '}
+            {problemSummary.companyText ? <><span className="problem-summary-label">Company:</span> {problemSummary.companyText}. </> : null}
+            {problemSummary.statusText}{' '}
+            {problemSummary.noteText ? <><span className="problem-summary-label">Note:</span> {problemSummary.noteText}</> : null}
+          </span>
+          <span className="problem-intent-line">Problem intent: {problemIntent}.</span>
+        </p>
+      </div>
+
+      <div className="problem-controls compact-controls">
+        <div className="problem-primary-actions">
+          <button
+            className="row-primary-btn"
+            onClick={() => updateStatusWithFeedback(primaryAction.status)}
+            title={primaryAction.label}
+          >
+            {Icon({ name: primaryAction.icon, size: 13 })} {primaryAction.label}
+          </button>
+
+          {hints.length > 0 && (
+            <button
+              className="hint-btn"
+              onClick={revealNextHint}
+              onPointerEnter={previewNextHint}
+              onFocus={previewNextHint}
+              disabled={!hasMore}
+              title={hasMore ? 'Preview hint on hover, click to reveal' : 'No more hints to preview'}
+            >
+              {Icon({ name: 'bulb', size: 11 })} {hintsShown === 0 ? 'Hint preview' : hasMore ? `Hint ${hintsShown + 1}/${hints.length}` : 'Hints done'}
+            </button>
+          )}
+
+          <button
+            className={`row-secondary-btn details-toggle-btn ${showDetails ? 'active' : ''}`}
+            onClick={toggleDetails}
+            title={showDetails ? 'Hide details and notes' : 'Show details and notes'}
+            aria-label={showDetails ? 'Hide details and notes' : 'Show details and notes'}
+          >
+            {Icon({ name: showDetails ? 'half' : 'plus', size: 13 })} {showDetails ? 'Hide details' : 'Details'}
+          </button>
+        </div>
+      </div>
+
+      {showDetails && (
+        <div className="problem-details">
+          <div className="problem-fields">
+            <label>
+              <span className="field-label">Status</span>
+              <select className="status-select" value={item.status}
+                onChange={e => updateStatusWithFeedback(e.target.value, 'select')}>
+                <option value="not-started">Not started</option>
+                <option value="attempted">Attempted</option>
+                <option value="solved">Solved</option>
+                <option value="revisit">Revisit</option>
+              </select>
+            </label>
+            <label className="detail-solve-type">
+              <span className="field-label">Solve type</span>
+              <select className="status-select" value={item.solutionType || 'unknown'}
+                onChange={e => changeSolveType(e.target.value)}>
+                <option value="unknown">Type</option>
+                <option value="unaided">Unaided</option>
+                <option value="hint-used">Hint used</option>
+                <option value="editorial">Editorial</option>
+              </select>
+            </label>
+          </div>
+
+          <div className="problem-detail-actions">
+            <button
+              className={`detail-chip-btn ${item.unaided ? 'active' : ''}`}
+              onClick={toggleUnaided}
+              title={item.unaided ? 'Unaided enabled' : 'Mark as unaided'}
+            >
+              {Icon({ name: item.unaided ? 'check' : 'circle', size: 13 })} {item.unaided ? 'Unaided: on' : 'Mark unaided'}
+            </button>
+            {item.link && (
+              <button className="detail-chip-btn" onClick={openProblemLink} title="Open problem link">
+                {Icon({ name: 'external', size: 13 })} Open link
+              </button>
+            )}
+            <button className="detail-chip-btn danger" onClick={removeProblem} title="Remove problem">
+              {Icon({ name: 'trash', size: 13 })} Remove
+            </button>
+          </div>
+
+          <div className="problem-fields">
+            <label>
+              <span className="field-label">Pattern</span>
+              <input list="patternSuggestions" className="pattern-field" placeholder="pattern..."
+                defaultValue={item.pattern || ''}
+                onBlur={e => onUpdate(phaseId, item.id, {pattern: e.target.value})} />
+            </label>
+            <label>
+              <span className="field-label">Company</span>
+              <input list="companySuggestions" className="company-field" placeholder="company..."
+                defaultValue={item.company || ''}
+                onBlur={e => onUpdate(phaseId, item.id, {company: e.target.value})} />
+            </label>
+          </div>
+
+          <div className="problem-notes">
+            <label>
+              <span className="field-label">Notes</span>
+              <textarea className="notes-input" placeholder="Pattern trigger, mistake, and takeaway..."
+                defaultValue={item.notes || ''}
+                onBlur={e => onUpdate(phaseId, item.id, {notes: e.target.value})} />
+            </label>
+            <div className="reflection-prompts">
+              <strong>After solve</strong>
+              Trigger: {item.triggerQuestion || 'what phrase revealed the pattern?'}<br />
+              Miss: {item.pitfall || 'where did you get stuck?'}<br />
+              Reuse: what template will you remember?
+            </div>
+          </div>
+        </div>
+      )}
+
+      {hintsShown > 0 && (
+        <div className="hint-panel card-hints">
+          {hints.slice(0, hintsShown).map((h, i) => (
+            <div key={i} className="hint-item"><span className="hint-num">Hint {i + 1}{h.generated ? ' - auto' : ''}</span>{h.text}</div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function AddRow({phaseId, onAdd}){
+  const nameRef = useRef(), linkRef = useRef(), patRef = useRef(), coRef = useRef();
+  const [difficulty, setDifficulty] = useState('Medium');
+  const submit = () => {
+    const name = nameRef.current.value.trim();
+    if(!name){ nameRef.current.focus(); return; }
+    onAdd(phaseId, {
+      name, link: linkRef.current.value.trim(), pattern: patRef.current.value.trim(),
+      company: coRef.current.value.trim(), difficulty
+    });
+    setDifficulty('Medium');
+    nameRef.current.value = ''; linkRef.current.value = ''; patRef.current.value = ''; coRef.current.value = '';
+  };
+  return (
+    <div className="add-row">
+      <input ref={nameRef} className="name-input" type="text" placeholder="Problem name" onKeyDown={e => e.key==='Enter' && submit()} />
+      <input ref={linkRef} className="link-input" type="text" placeholder="Link (optional)" onKeyDown={e => e.key==='Enter' && submit()} />
+      <input ref={patRef} className="pat-input" list="patternSuggestions" type="text" placeholder="Pattern (optional)" onKeyDown={e => e.key==='Enter' && submit()} />
+      <input ref={coRef} className="pat-input" list="companySuggestions" type="text" placeholder="Company (optional)" onKeyDown={e => e.key==='Enter' && submit()} />
+      <div className="difficulty-segment" role="group" aria-label="Difficulty">
+        {['Easy', 'Medium', 'Hard'].map(level => (
+          <button
+            key={level}
+            type="button"
+            className={`seg-btn ${difficulty === level ? 'active' : ''}`}
+            onClick={() => setDifficulty(level)}
+          >
+            {level}
+          </button>
+        ))}
+      </div>
+      <button className="add-btn" onClick={submit}>{Icon({ name: 'plus', size: 12 })} Add problem</button>
+    </div>
+  );
+}
+
+function PhaseGroup({def, idx, items, filter, searchQuery, onUpdate, onDelete, onAdd, isOpen, onToggle, onToast, intentRules}){
+  const orderedItems = useMemo(() => [...items].sort(sortPracticeItems), [items]);
+  const filtered = orderedItems.filter(i => (filter === 'all' || i.status === filter) && matchesSearch(i, searchQuery));
+  const solvedN = useMemo(() => items.reduce((acc, i) => acc + (i.status === 'solved' ? 1 : 0), 0), [items]);
+  const micro = useMemo(() => groupMicroStats(items), [items]);
+  return (
+    <div className={`group ${isOpen ? 'open' : ''}`}>
+      <div className="group-head" onClick={onToggle}>
+        <div className="group-idx">{idx}</div>
+        <div className="group-titles">
+          <h3>{def.title}</h3>
+          <div className="weeks">{def.weeks}</div>
+          <div className="group-micro">
+            <span className="micro-chip">last solved {formatDateShort(micro.lastSolvedTs)}</span>
+            <span className="micro-chip">avg attempts {micro.avgAttempts}</span>
+            <span className="micro-chip">unaided {micro.unaidedRate}%</span>
+          </div>
+        </div>
+        <div className="mini">{solvedN}/{items.length} solved</div>
+        <div className="chevron">▶</div>
+      </div>
+      <div className="group-body">
+        <p className="blurb">{def.blurb}</p>
+        <div className="patterns">{def.patterns.map(p => <span key={p} className="pattern-chip">{p}</span>)}</div>
+        <div className="practice-list">
+          {filtered.length ? filtered.map(item => (
+            <Row key={item.id} item={item} phaseId={def.id} onUpdate={onUpdate} onDelete={onDelete} searchQuery={searchQuery} onToast={onToast} intentRules={intentRules} />
+          )) : <div className="empty-hint">{items.length ? 'No problems match this filter.' : 'No problems added yet - add one below.'}</div>}
+        </div>
+        <AddRow phaseId={def.id} onAdd={onAdd} />
+      </div>
+    </div>
+  );
+}
+
+function PatternGroup({patternName, idx, entries, filter, searchQuery, onUpdate, onDelete, isOpen, onToggle, onToast, intentRules}){
+  const orderedEntries = useMemo(() => [...entries].sort(sortPracticeEntries), [entries]);
+  const items = orderedEntries.map(e => e.item);
+  const filtered = orderedEntries.filter(e => (filter === 'all' || e.item.status === filter) && matchesSearch(e.item, searchQuery));
+  const streak = computeStreak(items);
+  const micro = useMemo(() => groupMicroStats(items), [items]);
+  return (
+    <div className={`group ${isOpen ? 'open' : ''}`}>
+      <div className="group-head" onClick={onToggle}>
+        <div className="group-idx pat">{idx}</div>
+        <div className="group-titles">
+          <h3>{patternName}</h3>
+          <div className="weeks">{entries.length} problem{entries.length !== 1 ? 's' : ''} across topics</div>
+          <div className="group-micro">
+            <span className="micro-chip">last solved {formatDateShort(micro.lastSolvedTs)}</span>
+            <span className="micro-chip">avg attempts {micro.avgAttempts}</span>
+            <span className="micro-chip">unaided {micro.unaidedRate}%</span>
+          </div>
+        </div>
+        <StreakBadge streak={streak} />
+        <div className="chevron">▶</div>
+      </div>
+      <div className="group-body">
+        <div className="practice-list">
+          {filtered.length ? filtered.map(({item, phaseId}) => (
+            <Row key={item.id} item={item} phaseId={phaseId} onUpdate={onUpdate} onDelete={onDelete} showTopic searchQuery={searchQuery} onToast={onToast} intentRules={intentRules} />
+          )) : <div className="empty-hint">No problems match this filter.</div>}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function Heatmap({cells}){
+  const weeks = Math.max(1, Math.round(cells.length / 7));
+  return (
+    <div>
+      <div className="ring-label" style={{marginBottom:'12px'}}>Daily Consistency <span style={{color:'var(--text-faint)', textTransform:'none', fontWeight:400}}>— last {weeks} week{weeks === 1 ? '' : 's'}</span></div>
+      <div className="heatmap-grid">
+        {cells.map(c => {
+          const label = `${c.date.toDateString()}: ${c.count} solved`;
+          return <div key={c.key} className={`heat-cell heat-${heatLevel(c.count)}`} title={label}></div>;
+        })}
+      </div>
+      <div className="heat-legend">
+        <span>less</span>
+        <span className="heat-cell heat-0"></span>
+        <span className="heat-cell heat-1"></span>
+        <span className="heat-cell heat-2"></span>
+        <span className="heat-cell heat-3"></span>
+        <span>more</span>
+      </div>
+    </div>
+  );
+}
+
+function RevisitQueue({queue, onUpdate}){
+  const title = queue.length ? `${queue.length} due item${queue.length === 1 ? '' : 's'}` : 'queue clear';
+  return (
+    <div>
+      <div className="ring-label" style={{marginBottom:'12px'}}>Due For Revisit <span style={{color:'var(--text-faint)', textTransform:'none', fontWeight:400}}>— {title}</span></div>
+      {queue.length === 0
+        ? <div className="empty-hint">Nothing flagged — clean slate.</div>
+        : <div className="revisit-list">
+            {queue.map(({item, phaseId, daysOverdue}) => (
+              <div className="revisit-row" key={item.id}>
+                <div className="revisit-info">
+                  <div className="revisit-name">{item.name}</div>
+                  <div className="revisit-meta">{PHASE_MAP[phaseId] ? PHASE_MAP[phaseId].title : phaseId} · {daysOverdue === 0 ? 'due today' : `${daysOverdue}d overdue`}</div>
+                </div>
+                <button className="revisit-solve-btn" onClick={() => onUpdate(phaseId, item.id, {status:'solved'})}>mark solved</button>
+              </div>
+            ))}
+          </div>
+      }
+    </div>
+  );
+}
+
+function DailyPlan({items}){
+  const targetLabel = items.length ? `${items.length} item${items.length === 1 ? '' : 's'}` : 'adaptive queue';
+  return (
+    <div>
+      <div className="ring-label" style={{marginBottom:'12px'}}>Today&apos;s Plan <span style={{color:'var(--text-faint)', textTransform:'none', fontWeight:400}}>— {targetLabel}</span></div>
+      {items.length === 0
+        ? <div className="empty-hint">No plan yet — solve one problem to seed recommendations.</div>
+        : <div className="revisit-list">
+            {items.map(({item, phaseId}, idx) => (
+              <div className="revisit-row" key={`${item.id}-${idx}`}>
+                <div className="revisit-info">
+                  <div className="revisit-name">{item.name}</div>
+                  <div className="revisit-meta">{PHASE_MAP[phaseId] ? PHASE_MAP[phaseId].title : phaseId} · {item.difficulty} · {(item.pattern || 'Unsorted')} · {item.planReason || 'recommended'}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+      }
+    </div>
+  );
+}
+
+function WeakPatterns({insights}){
+  const shownCount = Math.min(6, Math.max(3, Math.ceil(insights.length / 2) || 0));
+  const shown = insights.slice(0, shownCount);
+  return (
+    <div>
+      <div className="ring-label" style={{marginBottom:'12px'}}>Weak Patterns <span style={{color:'var(--text-faint)', textTransform:'none', fontWeight:400}}>— {shown.length ? `${shown.length} active signal${shown.length === 1 ? '' : 's'}` : 'no pressure'}</span></div>
+      {insights.length === 0
+        ? <div className="empty-hint">Need more attempts to identify weak spots.</div>
+        : <div className="revisit-list">
+            {shown.map(p => (
+              <div className="revisit-row" key={p.pattern}>
+                <div className="revisit-info">
+                  <div className="revisit-name">{p.pattern}</div>
+                  <div className="revisit-meta">{p.solved}/{p.total} solved · unaided {Math.round(p.unaidedRate * 100)}%</div>
+                </div>
+              </div>
+            ))}
+          </div>
+      }
+    </div>
+  );
+}
+
+function Milestones({milestones, onCreate}){
+  const snapshotCount = milestones.length;
+  const visibleMilestones = milestones.slice(-Math.min(6, Math.max(3, snapshotCount || 0))).reverse();
+  return (
+    <div>
+      <div className="ring-label" style={{marginBottom:'12px'}}>Weekly Snapshots <span style={{color:'var(--text-faint)', textTransform:'none', fontWeight:400}}>— {snapshotCount ? `${snapshotCount} saved` : 'none yet'}</span></div>
+      <div style={{marginBottom:'10px'}}>
+        <button className="revisit-solve-btn" onClick={onCreate}>Generate Snapshot Now</button>
+      </div>
+      {milestones.length === 0
+        ? <div className="empty-hint">First milestone will be saved after your next solve.</div>
+        : <div className="revisit-list">
+            {visibleMilestones.map(m => (
+              <div className="revisit-row" key={m.at}>
+                <div className="revisit-info">
+                  <div className="revisit-name">{new Date(m.at).toLocaleDateString()}</div>
+                  <div className="revisit-meta">unique solved {m.uniqueSolved}/{m.totalUnique} · unaided {m.unaidedRate}%</div>
+                  {Array.isArray(m.improved) && m.improved.length > 0 && (
+                    <div className="revisit-meta">improved: {m.improved.join(', ')}</div>
+                  )}
+                  {Array.isArray(m.regressed) && m.regressed.length > 0 && (
+                    <div className="revisit-meta">regressed: {m.regressed.join(', ')}</div>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+      }
+    </div>
+  );
+}
+
+function NextBestAction({action, onRun}){
+  return (
+    <div>
+      <div className="ring-label" style={{marginBottom:'12px'}}>Next Best Action <span style={{color:'var(--text-faint)', textTransform:'none', fontWeight:400}}>— live</span></div>
+      <div className="revisit-list">
+        <div className="revisit-row">
+          <div className="revisit-info">
+            <div className="revisit-name">{action.title}</div>
+            <div className="revisit-meta">{action.detail}</div>
+          </div>
+          <button className="revisit-solve-btn" onClick={onRun}>{action.ctaLabel}</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function WeeklyTrends({trends}){
+  const formatDelta = (delta) => delta === 0 ? 'flat' : `${delta > 0 ? '+' : ''}${delta}`;
+  const maxSolved = Math.max(1, ...trends.weeklySeries.map(point => point.solves));
+  const maxAttempts = Math.max(1, ...trends.weeklySeries.map(point => point.attempts));
+  return (
+    <div>
+      <div className="ring-label" style={{marginBottom:'12px'}}>Weekly Trends <span style={{color:'var(--text-faint)', textTransform:'none', fontWeight:400}}>— this 7d vs previous 7d</span></div>
+      <div className="revisit-list">
+        <div className="revisit-row"><div className="revisit-info"><div className="revisit-name">Solved</div><div className="revisit-meta">{trends.solvedThisWeek} this week · {trends.solvedPrevWeek} last week · {formatDelta(trends.solvedDelta)}</div></div></div>
+        <div className="revisit-row"><div className="revisit-info"><div className="revisit-name">Attempts</div><div className="revisit-meta">{trends.attemptsThisWeek} this week · {trends.attemptsPrevWeek} last week · {formatDelta(trends.attemptsDelta)}</div></div></div>
+        <div className="revisit-row"><div className="revisit-info"><div className="revisit-name">Unaided rate</div><div className="revisit-meta">{trends.rateThisWeek}% this week · {trends.ratePrevWeek}% last week · {formatDelta(trends.rateDelta)} pts</div></div></div>
+      </div>
+      <div className="trend-chart">
+        <div className="trend-row">
+          <div className="trend-label">Solves</div>
+          <div className="trend-bars">
+            {trends.weeklySeries.map(point => (
+              <div key={`solve-${point.label}`} className="trend-bar" title={`${point.label}: ${point.solves} solves`}>
+                <div className="trend-bar-fill" style={{height: `${Math.max(8, Math.round((point.solves / maxSolved) * 100))}%`}}></div>
+              </div>
+            ))}
+          </div>
+          <div className="trend-value">{trends.solvedThisWeek}</div>
+        </div>
+        <div className="trend-row">
+          <div className="trend-label">Attempts</div>
+          <div className="trend-bars">
+            {trends.weeklySeries.map(point => (
+              <div key={`attempt-${point.label}`} className="trend-bar" title={`${point.label}: ${point.attempts} attempts`}>
+                <div className="trend-bar-fill" style={{height: `${Math.max(8, Math.round((point.attempts / maxAttempts) * 100))}%`, background:'linear-gradient(180deg, rgba(217,168,81,.95), rgba(255,185,220,.92))'}}></div>
+              </div>
+            ))}
+          </div>
+          <div className="trend-value">{trends.attemptsThisWeek}</div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function PhaseReadiness({phases}){
+  const visible = phases.slice(0, Math.min(6, phases.length));
+  return (
+    <div>
+      <div className="ring-label" style={{marginBottom:'12px'}}>Phase Readiness <span style={{color:'var(--text-faint)', textTransform:'none', fontWeight:400}}>— ranked by current signal</span></div>
+      <div className="revisit-list">
+        {visible.map(phase => (
+          <div className="revisit-row" key={phase.id}>
+            <div className="revisit-info">
+              <div className="revisit-name">{phase.title}</div>
+              <div className="revisit-meta">readiness {phase.readiness}% · solved {phase.solved}/{phase.total} · revisit {phase.revisitCount} · last solved {formatDateShort(phase.lastSolved)}</div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function RevisionIntelligence({insights}){
+  return (
+    <div>
+      <div className="ring-label" style={{marginBottom:'12px'}}>Revision Intelligence <span style={{color:'var(--text-faint)', textTransform:'none', fontWeight:400}}>— adaptive load</span></div>
+      <div className="revisit-list">
+        <div className="revisit-row"><div className="revisit-info"><div className="revisit-name">Revision queue</div><div className="revisit-meta">{insights.revisionItems} items in revision phase · {insights.unaidedReady} already unaided but still queued</div></div></div>
+        <div className="revisit-row"><div className="revisit-info"><div className="revisit-name">External help load</div><div className="revisit-meta">{insights.editorialHeavy} editorial solves · {insights.hintHeavy} hint-used solves</div></div></div>
+        <div className="revisit-row"><div className="revisit-info"><div className="revisit-name">Retry pressure</div><div className="revisit-meta">{insights.retryReady} attempted items ready for retry · {insights.overdueHard} overdue hard reviews</div></div></div>
+      </div>
+    </div>
+  );
+}
+
+function SessionPlanner({sessionMode, onChange, planCount}){
+  return (
+    <div>
+      <div className="ring-label" style={{marginBottom:'12px'}}>Session Planner <span style={{color:'var(--text-faint)', textTransform:'none', fontWeight:400}}>— {SESSION_PRESETS[sessionMode].label} mode · {planCount} planned</span></div>
+      <div className="control-block" style={{padding:'0', minHeight:'auto'}}>
+        {Object.entries(SESSION_PRESETS).map(([key, preset]) => (
+          <button key={key} className={`filter-btn ${sessionMode === key ? 'active' : ''}`} onClick={() => onChange(key)}>{preset.label}</button>
+        ))}
+      </div>
+      <div className="notice-bar" style={{marginTop:'12px'}}>The plan size, due-review weight, warm-up count, and stretch work all rebalance from this session mode.</div>
+    </div>
+  );
+}
+
+function RecentActivity({items}){
+  return (
+    <div>
+      <div className="ring-label" style={{marginBottom:'12px'}}>Recent Activity <span style={{color:'var(--text-faint)', textTransform:'none', fontWeight:400}}>— latest changes</span></div>
+      {items.length === 0
+        ? <div className="empty-hint">No history yet — changes will start appearing after you interact with problems.</div>
+        : <div className="revisit-list">
+            {items.map((entry, index) => (
+              <div className="revisit-row" key={`${entry.canonicalProblemId}-${entry.at}-${index}`}>
+                <div className="revisit-info">
+                  <div className="revisit-name">{entry.itemName}</div>
+                  <div className="revisit-meta">{PHASE_MAP[entry.phaseId] ? PHASE_MAP[entry.phaseId].title : entry.phaseId} · {entry.type} · {entry.detail} · {new Date(entry.at).toLocaleString()}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+      }
+    </div>
+  );
+}
+
+function ProgressTracker({tracker}){
+  return (
+    <div>
+      <div className="ring-label" style={{marginBottom:'12px'}}>Progress Tracker <span style={{color:'var(--text-faint)', textTransform:'none', fontWeight:400}}>— {tracker.solved}/{tracker.total || 0} solved</span></div>
+      <div className="revisit-list">
+        <div className="revisit-row">
+          <div className="revisit-info">
+            <div className="revisit-name">Remaining unique problems</div>
+            <div className="revisit-meta">{tracker.remaining} left · next checkpoint {tracker.nextCheckpoint || 0}{tracker.remainingToCheckpoint ? ` in ${tracker.remainingToCheckpoint}` : ' reached'}</div>
+          </div>
+        </div>
+        <div className="revisit-row">
+          <div className="revisit-info">
+            <div className="revisit-name">Current pace</div>
+            <div className="revisit-meta">{tracker.solvedToday} solved today · {tracker.solvedLast7} solved in 7d · {tracker.attemptsLast7} attempts in 7d</div>
+          </div>
+        </div>
+        <div className="revisit-row">
+          <div className="revisit-info">
+            <div className="revisit-name">Consistency streak</div>
+            <div className="revisit-meta">{tracker.currentStreak} day{tracker.currentStreak === 1 ? '' : 's'} with at least one solve · {tracker.dueNow} review item{tracker.dueNow === 1 ? '' : 's'} due</div>
+          </div>
+        </div>
+      </div>
+      <div className="phase-bars" style={{marginTop:'12px'}}>
+        {tracker.difficulty.map(level => (
+          <div className="pb-row" key={level.label}>
+            <div className="pname">{level.label}</div>
+            <div className="pb-track"><div className="pb-fill" style={{width: level.pct + '%'}}></div></div>
+            <div className="pcount">{level.solved}/{level.total}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function StudyInsights({tracker}){
+  const latestSnapshot = tracker.latestMilestone ? new Date(tracker.latestMilestone.at).toLocaleDateString() : 'none yet';
+  return (
+    <div>
+      <div className="ring-label" style={{marginBottom:'12px'}}>Study Signals <span style={{color:'var(--text-faint)', textTransform:'none', fontWeight:400}}>— adaptive</span></div>
+      <div className="revisit-list">
+        <div className="revisit-row">
+          <div className="revisit-info">
+            <div className="revisit-name">Primary pressure</div>
+            <div className="revisit-meta">{tracker.weakestPattern ? `${tracker.weakestPattern.pattern} · ${Math.round(tracker.weakestPattern.solvedRate * 100)}% solved · ${tracker.weakestPattern.revisit} revisit signals` : 'No weak pattern signal yet.'}</div>
+          </div>
+        </div>
+        <div className="revisit-row">
+          <div className="revisit-info">
+            <div className="revisit-name">Strongest pattern</div>
+            <div className="revisit-meta">{tracker.strongestPattern ? `${tracker.strongestPattern.pattern} · ${Math.round(tracker.strongestPattern.solvedRate * 100)}% solved · unaided ${Math.round(tracker.strongestPattern.unaidedRate * 100)}%` : 'Not enough solved data yet.'}</div>
+          </div>
+        </div>
+        <div className="revisit-row">
+          <div className="revisit-info">
+            <div className="revisit-name">Latest checkpoint</div>
+            <div className="revisit-meta">{latestSnapshot} · next milestone target {tracker.nextCheckpoint || 0} unique solved</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function App(){
+  const initialPrefs = readUiPrefs();
+  const initialTimerPreset = TIMER_PRESET_MINUTES.includes(Number(initialPrefs.timerPresetMin))
+    ? Number(initialPrefs.timerPresetMin)
+    : 30;
+  const initialTimerRemaining = Number.isFinite(initialPrefs.timerRemainingSec) && initialPrefs.timerRemainingSec > 0
+    ? Math.floor(initialPrefs.timerRemainingSec)
+    : initialTimerPreset * 60;
+  const [appData, setAppData] = useState(null);
+  const [sectionTab, setSectionTab] = useState(['overview','analysis','problems'].includes(initialPrefs.sectionTab) ? initialPrefs.sectionTab : 'problems');
+  const [sessionMode, setSessionMode] = useState(Object.prototype.hasOwnProperty.call(SESSION_PRESETS, initialPrefs.sessionMode) ? initialPrefs.sessionMode : '30');
+  const [importNotice, setImportNotice] = useState('');
+  const [viewMode, setViewMode] = useState(initialPrefs.viewMode === 'pattern' ? 'pattern' : 'topic');
+  const [filter, setFilter] = useState(['all','not-started','attempted','solved','revisit'].includes(initialPrefs.filter) ? initialPrefs.filter : 'all');
+  const [searchQuery, setSearchQuery] = useState(typeof initialPrefs.searchQuery === 'string' ? initialPrefs.searchQuery : '');
+  const [saveState, setSaveState] = useState('idle'); // idle | saving | saved
+  const [compactMode, setCompactMode] = useState(!!initialPrefs.compactMode);
+  const [focusMode, setFocusMode] = useState(!!initialPrefs.focusMode);
+  const [groupOpen, setGroupOpen] = useState(() => {
+    const topic = initialPrefs.groupOpen && initialPrefs.groupOpen.topic && typeof initialPrefs.groupOpen.topic === 'object'
+      ? initialPrefs.groupOpen.topic
+      : {};
+    const pattern = initialPrefs.groupOpen && initialPrefs.groupOpen.pattern && typeof initialPrefs.groupOpen.pattern === 'object'
+      ? initialPrefs.groupOpen.pattern
+      : {};
+    return { topic, pattern };
+  });
+  const [showTips, setShowTips] = useState(!readTipsDismissed());
+  const [showShortcutModal, setShowShortcutModal] = useState(false);
+  const [timerPresetMin, setTimerPresetMin] = useState(initialTimerPreset);
+  const [timerRemainingSec, setTimerRemainingSec] = useState(initialTimerRemaining);
+  const [timerRunning, setTimerRunning] = useState(false);
+  const [toast, setToast] = useState(null);
+  const saveTimer = useRef(null);
+  const searchInputRef = useRef(null);
+
+  useEffect(() => {
+    fetch('/api/data').then(r => r.json()).then(d => {
+      const normalized = normalizeAppData(d);
+      setAppData(normalized);
+      if(hasImportRepairs(normalized.report)){
+        setImportNotice(`Startup normalization applied: ${summarizeImportReport(normalized.report)}`);
+        persist(normalized);
+      }
+    }).catch(() => setAppData(normalizeAppData({ phases: emptyPhases() })));
+  }, []);
+
+  useEffect(() => {
+    const isTypingTarget = (el) => {
+      if(!el || !(el instanceof HTMLElement)) return false;
+      const tag = el.tagName;
+      return el.isContentEditable || tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT';
+    };
+
+    const onKeyDown = (event) => {
+      if(event.key === '/' && !event.ctrlKey && !event.metaKey && !event.altKey){
+        if(isTypingTarget(event.target)) return;
+        event.preventDefault();
+        if(searchInputRef.current){
+          searchInputRef.current.focus();
+          searchInputRef.current.select();
+        }
+        return;
+      }
+      if(event.key === 'Escape' && searchQuery){
+        setSearchQuery('');
+        return;
+      }
+      if(event.key === 'Escape' && showShortcutModal){
+        setShowShortcutModal(false);
+        return;
+      }
+      if(event.key === '?' && !event.ctrlKey && !event.metaKey && !event.altKey){
+        if(isTypingTarget(event.target)) return;
+        event.preventDefault();
+        setShowShortcutModal(v => !v);
+      }
+    };
+
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [searchQuery, showShortcutModal]);
+
+  useEffect(() => {
+    writeUiPrefs({
+      sectionTab,
+      sessionMode,
+      viewMode,
+      filter,
+      searchQuery,
+      compactMode,
+      focusMode,
+      groupOpen,
+      timerPresetMin,
+      timerRemainingSec
+    });
+  }, [sectionTab, sessionMode, viewMode, filter, searchQuery, compactMode, focusMode, groupOpen, timerPresetMin, timerRemainingSec]);
+
+  useEffect(() => {
+    if(!toast) return;
+    const timer = setTimeout(() => setToast(null), toast.duration || 2200);
+    return () => clearTimeout(timer);
+  }, [toast]);
+
+  const pushToast = useCallback((type, message, options = {}) => {
+    setToast({ id: Date.now(), type, message, ...options });
+  }, []);
+
+  useEffect(() => {
+    if(!timerRunning) return;
+    const intervalId = window.setInterval(() => {
+      setTimerRemainingSec(prev => {
+        if(prev <= 1){
+          setTimerRunning(false);
+          pushToast('success', 'Study timer complete.', {
+            detail: 'Session finished. Log your key takeaway before starting the next block.',
+            duration: 4800,
+            icon: 'check'
+          });
+          return timerPresetMin * 60;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+    return () => window.clearInterval(intervalId);
+  }, [timerRunning, timerPresetMin, pushToast]);
+
+  const isTopicGroupOpen = useCallback((phaseId, idx) => {
+    if(Object.prototype.hasOwnProperty.call(groupOpen.topic, phaseId)) return !!groupOpen.topic[phaseId];
+    return idx === 0;
+  }, [groupOpen]);
+
+  const isPatternGroupOpen = useCallback((patternName, idx) => {
+    if(Object.prototype.hasOwnProperty.call(groupOpen.pattern, patternName)) return !!groupOpen.pattern[patternName];
+    return idx === 0;
+  }, [groupOpen]);
+
+  const toggleTopicGroup = useCallback((phaseId, idx) => {
+    setGroupOpen(prev => {
+      const current = Object.prototype.hasOwnProperty.call(prev.topic, phaseId) ? !!prev.topic[phaseId] : idx === 0;
+      return {
+        ...prev,
+        topic: {
+          ...prev.topic,
+          [phaseId]: !current
+        }
+      };
+    });
+  }, []);
+
+  const togglePatternGroup = useCallback((patternName, idx) => {
+    setGroupOpen(prev => {
+      const current = Object.prototype.hasOwnProperty.call(prev.pattern, patternName) ? !!prev.pattern[patternName] : idx === 0;
+      return {
+        ...prev,
+        pattern: {
+          ...prev.pattern,
+          [patternName]: !current
+        }
+      };
+    });
+  }, []);
+
+  const persist = useCallback((nextData) => {
+    setSaveState('saving');
+    clearTimeout(saveTimer.current);
+    saveTimer.current = setTimeout(() => {
+      fetch('/api/data', {
+        method: 'PUT', headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({ phases: nextData.phases, meta: nextData.meta })
+      }).then(() => { setSaveState('saved'); setTimeout(() => setSaveState('idle'), 1500); })
+        .catch(() => setSaveState('idle'));
+    }, 250);
+  }, []);
+
+  const phases = appData ? appData.phases : null;
+  const meta = appData ? appData.meta : { milestones: [], activityLog: [], problemIntentRules: [] };
+
+  const runRepairPass = useCallback(() => {
+    if(!appData) return;
+    const normalized = normalizeAppData({ phases: appData.phases, meta: appData.meta });
+    const summary = summarizeImportReport(normalized.report);
+    setAppData(normalized);
+    setImportNotice(`Manual repair pass: ${summary}`);
+    persist(normalized);
+    pushToast('success', 'Repair pass completed.');
+  }, [appData, persist, pushToast]);
+
+  const updateItem = (phaseId, itemId, patch) => {
+    setAppData(prev => {
+      const nowTs = Date.now();
+      let changedItem = null;
+      const nextPhases = {
+        ...prev.phases,
+        [phaseId]: prev.phases[phaseId].map(i => {
+          if(i.id !== itemId) return i;
+          let updated = normalizeItem({ ...i, ...patch });
+          updated.lastAttemptAt = nowTs;
+          if(patch.solutionType === 'unaided') updated.unaided = true;
+          if(typeof patch.unaided === 'boolean') updated.solutionType = patch.unaided ? 'unaided' : (updated.solutionType === 'unaided' ? 'hint-used' : updated.solutionType);
+          if(patch.status && patch.status !== i.status && (patch.status === 'attempted' || patch.status === 'solved')) {
+            updated.attemptsCount = (i.attemptsCount || 0) + 1;
+          }
+          if(patch.status === 'solved' && i.status !== 'solved') {
+            updated.solvedAt = nowTs;
+            updated.firstAcceptedAt = i.firstAcceptedAt || nowTs;
+          }
+          if(patch.status === 'revisit' && i.status !== 'revisit') updated.revisitAt = nowTs;
+          updated = applyReviewSchedule(updated, i, nowTs);
+          if(patch.status && patch.status !== i.status) updated = appendHistoryEntry(updated, 'status', `${statusLabel(i.status)} -> ${statusLabel(patch.status)}`, nowTs);
+          if(typeof patch.unaided === 'boolean' && patch.unaided !== !!i.unaided) updated = appendHistoryEntry(updated, 'unaided', patch.unaided ? 'marked unaided' : 'removed unaided flag', nowTs);
+          if(patch.solutionType && patch.solutionType !== (i.solutionType || 'unknown')) updated = appendHistoryEntry(updated, 'solve-type', `set to ${patch.solutionType}`, nowTs);
+          if(patch.pattern !== undefined && patch.pattern !== (i.pattern || '')) updated = appendHistoryEntry(updated, 'pattern', `pattern -> ${patch.pattern || 'cleared'}`, nowTs);
+          if(patch.company !== undefined && patch.company !== (i.company || '')) updated = appendHistoryEntry(updated, 'company', `company -> ${patch.company || 'cleared'}`, nowTs);
+          if(patch.notes !== undefined && patch.notes !== (i.notes || '')) updated = appendHistoryEntry(updated, 'notes', 'notes updated', nowTs);
+          changedItem = updated;
+          return updated;
+        })
+      };
+
+      const withRevision = changedItem ? queueRevisionCopy(nextPhases, phaseId, changedItem) : nextPhases;
+      const flatNext = flattenPhases(withRevision);
+      const nextMeta = changedItem && changedItem.status === 'solved'
+        ? maybeAppendMilestone(prev.meta, flatNext, nowTs, false)
+        : prev.meta;
+      const nextData = { phases: withRevision, meta: nextMeta };
+      persist(nextData);
+      return nextData;
+    });
+  };
+
+  const createSnapshotNow = useCallback(() => {
+    setAppData(prev => {
+      const nowTs = Date.now();
+      const flatNow = flattenPhases(prev.phases);
+      let nextMeta = maybeAppendMilestone(prev.meta, flatNow, nowTs, true);
+      nextMeta = appendGlobalActivity(nextMeta, 'snapshot', 'manual snapshot created', nowTs);
+      const nextData = { phases: prev.phases, meta: nextMeta };
+      setImportNotice('Manual snapshot created.');
+      persist(nextData);
+      pushToast('success', 'Snapshot saved.');
+      return nextData;
+    });
+  }, [persist, pushToast]);
+
+  const deleteItem = (phaseId, itemId) => {
+    setAppData(prev => {
+      const prevSnapshot = cloneTrackerData(prev);
+      const removed = (prev.phases[phaseId] || []).find(i => i.id === itemId);
+      const nextData = {
+        ...prev,
+        phases: { ...prev.phases, [phaseId]: prev.phases[phaseId].filter(i => i.id !== itemId) },
+        meta: appendGlobalActivity(prev.meta, 'delete', removed ? `removed ${removed.name}` : 'removed problem', Date.now(), removed ? { itemName: removed.name, phaseId } : { phaseId })
+      };
+      persist(nextData);
+      pushToast('success', 'Problem removed.', {
+        duration: 6000,
+        actionLabel: 'Undo',
+        onAction: () => {
+          setAppData(prevSnapshot);
+          persist(prevSnapshot);
+          pushToast('success', 'Removal undone.');
+        }
+      });
+      return nextData;
+    });
+  };
+
+  const addItem = (phaseId, fields) => {
+    setAppData(prev => {
+      const nowTs = Date.now();
+      let item = normalizeItem({
+        id: uid(), name: fields.name, link: fields.link || '', pattern: fields.pattern || '',
+        company: fields.company || '', difficulty: fields.difficulty || 'Medium',
+        status: 'not-started', unaided: false, notes: '', hints: [],
+        createdAt: nowTs, solvedAt: null, revisitAt: null
+      });
+      item = appendHistoryEntry(item, 'created', 'problem added to tracker', nowTs);
+      const nextData = {
+        ...prev,
+        phases: { ...prev.phases, [phaseId]: [...prev.phases[phaseId], item] },
+        meta: appendGlobalActivity(prev.meta, 'create', `added ${item.name}`, nowTs, { itemName: item.name, phaseId, canonicalProblemId: item.canonicalProblemId })
+      };
+      persist(nextData);
+      pushToast('success', 'Problem added.');
+      return nextData;
+    });
+  };
+
+  const exportBackup = () => {
+    const blob = new Blob([JSON.stringify({ phases: appData.phases, meta: appData.meta }, null, 2)], {type: 'application/json'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `dsa-tracker-backup-${new Date().toISOString().slice(0,10)}.json`;
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    setAppData(prev => {
+      const nextData = { ...prev, meta: appendGlobalActivity(prev.meta, 'export', 'backup exported', Date.now()) };
+      persist(nextData);
+      return nextData;
+    });
+    pushToast('success', 'Backup exported.');
+  };
+
+  const importFileRef = useRef(null);
+  const importBackup = (file) => {
+    const reader = new FileReader();
+    reader.onload = e => {
+      try{
+        const previous = appData ? cloneTrackerData(appData) : null;
+        const parsed = JSON.parse(e.target.result);
+        const nextData = normalizeAppData(parsed.phases ? parsed : { phases: parsed });
+        const incomingFlat = flattenPhases(nextData.phases);
+        const incomingUnique = uniqueProgress(incomingFlat);
+        const preview = summarizeImportReport(nextData.report);
+        const msg = [
+          'Import preview:',
+          `- ${incomingFlat.length} total entries`,
+          `- ${incomingUnique.total} unique problems`,
+          `- ${incomingUnique.solved} unique solved`,
+          `- Repairs: ${preview}`,
+          '',
+          'This will replace your current tracker data. Continue?'
+        ].join('\n');
+        if(!window.confirm(msg)) return;
+        const nowTs = Date.now();
+        nextData.meta = appendGlobalActivity(nextData.meta, 'import', 'backup imported', nowTs);
+        setAppData(nextData);
+        setImportNotice(`Import complete: ${summarizeImportReport(nextData.report)}`);
+        persist(nextData);
+        pushToast('success', 'Backup imported.', previous ? {
+          duration: 7000,
+          actionLabel: 'Undo',
+          onAction: () => {
+            setAppData(previous);
+            persist(previous);
+            pushToast('success', 'Import undone.');
+          }
+        } : {});
+      }catch(err){
+        pushToast('error', 'Import failed.');
+        alert('Could not import this file: ' + err.message);
+      }
+    };
+    reader.readAsText(file);
+  };
+
+  const flat = useMemo(() => {
+    if(!phases) return [];
+    return flattenPhases(phases);
+  }, [phases]);
+
+  const byPattern = useMemo(() => {
+    const map = {};
+    flat.forEach(entry => {
+      const key = (entry.item.pattern || '').trim() || 'Unsorted';
+      if(!map[key]) map[key] = [];
+      map[key].push(entry);
+    });
+    return Object.entries(map).sort((a,b) => b[1].length - a[1].length);
+  }, [flat]);
+
+  const dashboardData = useMemo(() => {
+    const totals = uniqueProgress(flat);
+    const weakPatterns = buildPatternInsights(flat);
+    const dailyPlan = buildDailyPlan(flat, weakPatterns, sessionMode);
+    const heatmapCells = buildHeatmap(flat, computeHeatmapWeeks(flat));
+    const revisitQueue = buildRevisitQueue(flat, Math.min(8, Math.max(3, Math.ceil(flat.length / 10) || 3)));
+    const integrity = buildIntegrityStats(flat);
+    const phaseStats = {};
+    if(phases){
+      PHASE_DEFS.forEach(p => {
+        const items = phases[p.id] || [];
+        const solved = items.reduce((acc, i) => acc + (i.status === 'solved' ? 1 : 0), 0);
+        const total = items.length;
+        phaseStats[p.id] = { solved, total, pct: total ? Math.round((solved / total) * 100) : 0 };
+      });
+    }
+    const tracker = buildProgressTracker(flat, weakPatterns, revisitQueue, meta.milestones || []);
+    const trends = buildWeeklyTrends(flat);
+    const readiness = buildPhaseReadiness(phases || emptyPhases());
+    const revisionInsights = buildRevisionInsights(flat, revisitQueue);
+    const recentActivity = buildRecentActivity(flat, meta.activityLog || [], Math.min(10, Math.max(4, Math.ceil(flat.length / 8) || 4)));
+    const nextAction = buildNextBestAction(dailyPlan, revisitQueue, weakPatterns, tracker);
+    return { totals, weakPatterns, dailyPlan, heatmapCells, revisitQueue, phaseStats, integrity, tracker, trends, readiness, revisionInsights, recentActivity, nextAction };
+  }, [flat, phases, meta.milestones, meta.activityLog, sessionMode]);
+
+  const { totals, weakPatterns, dailyPlan, heatmapCells, revisitQueue, phaseStats, integrity, tracker, trends, readiness, revisionInsights, recentActivity, nextAction } = dashboardData;
+  const timerTotalSec = Math.max(1, timerPresetMin * 60);
+  const timerRemainingPct = Math.max(0, Math.min(100, Math.round((timerRemainingSec / timerTotalSec) * 100)));
+  const visibleCount = useMemo(() => {
+    return flat.reduce((acc, entry) => {
+      const statusOk = filter === 'all' || entry.item.status === filter;
+      const searchOk = matchesSearch(entry.item, searchQuery);
+      return acc + (statusOk && searchOk ? 1 : 0);
+    }, 0);
+  }, [flat, filter, searchQuery]);
+
+  const onboardingHint = useMemo(() => {
+    if(totals.solved > 10) return '';
+    if((phaseStats.setup && phaseStats.setup.solved < 2) || (phaseStats.arrays && phaseStats.arrays.solved < 3)){
+      return 'First week focus: finish Setup refresh, then solve 3 Easy in Arrays & Hashing.';
+    }
+    return 'Start with Easy problems in your current open topic before moving to Medium.';
+  }, [totals.solved, phaseStats]);
+
+  const jumpToRevision = useCallback(() => {
+    setSectionTab('problems');
+    setViewMode('topic');
+    setFilter('all');
+    setSearchQuery('');
+    setGroupOpen(prev => ({ ...prev, topic: { ...prev.topic, revision: true } }));
+    pushToast('success', 'Opened revision track.');
+  }, [pushToast]);
+
+  const solveFirstDue = useCallback(() => {
+    if(revisitQueue.length === 0){
+      pushToast('error', 'No due review items right now.');
+      return;
+    }
+    const first = revisitQueue[0];
+    updateItem(first.phaseId, first.item.id, { status: 'solved' });
+    pushToast('success', 'Marked one due item as solved.');
+  }, [revisitQueue, updateItem, pushToast]);
+
+  const quickAddToArrays = useCallback(() => {
+    setSectionTab('problems');
+    setViewMode('topic');
+    setGroupOpen(prev => ({ ...prev, topic: { ...prev.topic, arrays: true } }));
+    pushToast('success', 'Arrays section opened.');
+  }, [pushToast]);
+
+  const setTimerPreset = useCallback((minutes) => {
+    if(!TIMER_PRESET_MINUTES.includes(minutes)) return;
+    setTimerPresetMin(minutes);
+    if(!timerRunning) setTimerRemainingSec(minutes * 60);
+  }, [timerRunning]);
+
+  const toggleTimer = useCallback(() => {
+    setTimerRunning(prev => {
+      const next = !prev;
+      if(next && timerRemainingSec <= 0){
+        setTimerRemainingSec(timerPresetMin * 60);
+      }
+      return next;
+    });
+  }, [timerRemainingSec, timerPresetMin]);
+
+  const resetTimer = useCallback(() => {
+    setTimerRunning(false);
+    setTimerRemainingSec(timerPresetMin * 60);
+  }, [timerPresetMin]);
+
+  const openProblemsHub = useCallback(() => {
+    setSectionTab('problems');
+    setViewMode('topic');
+    pushToast('success', 'Opened problems workspace.');
+  }, [pushToast]);
+
+  const focusProblem = useCallback((target) => {
+    if(!target || !target.itemId) return;
+    setSectionTab('problems');
+    setViewMode('topic');
+    setGroupOpen(prev => ({
+      ...prev,
+      topic: {
+        ...prev.topic,
+        [target.phaseId]: true
+      }
+    }));
+    window.setTimeout(() => {
+      const element = document.getElementById(`problem-${target.itemId}`);
+      if(element){
+        element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        if(typeof element.focus === 'function') element.focus({ preventScroll: true });
+      }
+    }, 80);
+    pushToast('success', 'Opened recommended problem.');
+  }, [pushToast]);
+
+  const runNextBestAction = useCallback(() => {
+    if(!nextAction) return;
+    if(nextAction.actionKey === 'focus_problem'){
+      focusProblem(nextAction.target);
+      return;
+    }
+    if(nextAction.actionKey === 'open_revision'){
+      jumpToRevision();
+      return;
+    }
+    openProblemsHub();
+  }, [nextAction, focusProblem, jumpToRevision, openProblemsHub]);
+
+  if(!phases) return <div style={{padding:'60px', fontFamily:'var(--font-mono)', color:'#8b5cf6'}}>Loading…</div>;
+
+  return (
+    <React.Fragment>
+      <datalist id="patternSuggestions">
+        {PATTERN_SUGGESTIONS.map(p => <option key={p} value={p} />)}
+      </datalist>
+      <datalist id="companySuggestions">
+        {COMPANY_SUGGESTIONS.map(c => <option key={c} value={c} />)}
+      </datalist>
+
+      <div className={`page-shell ${compactMode ? 'compact-mode' : ''} ${focusMode ? 'focus-mode' : ''}`}>
+      <header>
+        <div className="header-top">
+          <div>
+            <div className="eyebrow">Local-first DSA studio</div>
+            <h1>Study DSA with a Clear, Punchy Workspace</h1>
+            <p className="sub">A cleaner, high-contrast dashboard for topic tracking, pattern practice, and quick revision. Data lives in <code className="inline">data/data.json</code> next to this server.</p>
+          </div>
+          <div className={`save-indicator ${saveState}`}>
+            {saveState === 'saving' ? '● saving…' : saveState === 'saved' ? '✓ saved to data.json' : '\u00A0'}
+          </div>
+        </div>
+        <div className="header-meta">
+          <span className="meta-pill"><strong>Local first</strong> no cloud sync</span>
+          <span className="meta-pill"><strong>JSON backed</strong> edits persist instantly</span>
+          <span className="meta-pill"><strong>No build</strong> runs from a single HTML file</span>
+        </div>
+        <div className="quick-actions">
+          <span className="quick-title">Quick actions</span>
+          <button className="quick-btn" onClick={solveFirstDue}>{Icon({ name: 'zap', size: 12 })}Solve 1 due</button>
+          <button className="quick-btn" onClick={jumpToRevision}>{Icon({ name: 'target', size: 12 })}Open revision</button>
+          <button className="quick-btn" onClick={quickAddToArrays}>{Icon({ name: 'plus', size: 12 })}Add in arrays</button>
+          <button className="quick-btn" onClick={() => setShowShortcutModal(true)}>{Icon({ name: 'keyboard', size: 12 })}Shortcuts</button>
+        </div>
+        <div className="study-timer">
+          <span className="quick-title">Study timer</span>
+          <div className="timer-presets">
+            {TIMER_PRESET_MINUTES.map(minutes => (
+              <button
+                key={minutes}
+                className={`timer-preset-btn ${timerPresetMin === minutes ? 'active' : ''}`}
+                onClick={() => setTimerPreset(minutes)}
+              >
+                {minutes}m
+              </button>
+            ))}
+          </div>
+          <div className={`timer-circle ${timerRunning ? 'running' : ''}`} style={{'--timer-pct': timerRemainingPct}}>
+            <div className="timer-circle-inner">
+              <div className="timer-clock">{formatTimerClock(timerRemainingSec)}</div>
+              <div className="timer-left">{timerRemainingPct}% left</div>
+            </div>
+          </div>
+          <div className="timer-controls">
+            <button className="timer-control-btn primary" onClick={toggleTimer}>
+              {Icon({ name: timerRunning ? 'half' : 'zap', size: 12 })} {timerRunning ? 'Pause' : 'Start'}
+            </button>
+            <button className="timer-control-btn" onClick={resetTimer}>
+              {Icon({ name: 'refresh', size: 12 })} Reset
+            </button>
+          </div>
+        </div>
+        {onboardingHint && <div className="guide-bar"><strong>Guide:</strong> {onboardingHint}</div>}
+      </header>
+
+      <div className="section-switcher">
+        <div className="section-switcher-label">Page sections</div>
+        <div className="section-tabs">
+          {['overview','analysis','problems'].map(tab => (
+            <button
+              key={tab}
+              className={`section-tab-btn ${sectionTab === tab ? 'active' : ''}`}
+              onClick={() => setSectionTab(tab)}
+            >
+              {tab.charAt(0).toUpperCase() + tab.slice(1)}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {sectionTab === 'overview' && <div className="dashboard">
+        <div className="dash-grid overview-hero-grid">
+          <div className="overview-side-stack">
+            <div className="card progress-card">
+              <div className="ring-label">Overall Progress</div>
+              <div className="ring-wrap">
+                <div className="ring-num">{totals.pct}%</div>
+                <div style={{fontSize:'12.5px', color:'var(--text-dim)', fontFamily:'var(--font-mono)'}}>
+                  <div>{totals.solved} unique solved</div>
+                  <div style={{color:'var(--text-faint)', marginTop:'2px'}}>{totals.total} unique problems</div>
+                </div>
+              </div>
+              <div className="legend">
+                <span><span className="dot" style={{background:'#c4b5fd'}}></span>not started</span>
+                <span><span className="dot" style={{background:'var(--gold)'}}></span>attempted</span>
+                <span><span className="dot" style={{background:'var(--teal)'}}></span>solved</span>
+                <span><span className="dot" style={{background:'var(--coral)'}}></span>revisit</span>
+              </div>
+            </div>
+            <div className="overview-mini-grid">
+              <div className="card overview-stat-card stat-solved">
+                <div className="overview-stat-label">Solved Today</div>
+                <div className="overview-stat-value">{tracker.solvedToday}</div>
+                <div className="overview-stat-note">{tracker.solvedLast7} solved in 7d</div>
+              </div>
+              <div className="card overview-stat-card stat-due">
+                <div className="overview-stat-label">Due Reviews</div>
+                <div className="overview-stat-value">{tracker.dueNow}</div>
+                <div className="overview-stat-note">ready for revisit now</div>
+              </div>
+              <div className="card overview-stat-card stat-streak">
+                <div className="overview-stat-label">Current Streak</div>
+                <div className="overview-stat-value">{tracker.currentStreak}d</div>
+                <div className="overview-stat-note">days with at least one solve</div>
+              </div>
+              <div className="card overview-stat-card stat-checkpoint">
+                <div className="overview-stat-label">Next Checkpoint</div>
+                <div className="overview-stat-value">{tracker.nextCheckpoint || 0}</div>
+                <div className="overview-stat-note">{tracker.remainingToCheckpoint ? `${tracker.remainingToCheckpoint} more solves` : 'checkpoint reached'}</div>
+              </div>
+              <div className="card overview-stat-card stat-attempts">
+                <div className="overview-stat-label">Attempts 7d</div>
+                <div className="overview-stat-value">{tracker.attemptsLast7}</div>
+                <div className="overview-stat-note">recent tries across the roadmap</div>
+              </div>
+              <div className="card overview-stat-card stat-remaining">
+                <div className="overview-stat-label">Remaining</div>
+                <div className="overview-stat-value">{tracker.remaining}</div>
+                <div className="overview-stat-note">unique problems still unsolved</div>
+              </div>
+            </div>
+          </div>
+          <div className="card">
+            <div className="ring-label" style={{marginBottom:'12px'}}>By Topic</div>
+            <div className="phase-bars">
+              {PHASE_DEFS.map(p => {
+                const stats = phaseStats[p.id] || { solved: 0, total: 0, pct: 0 };
+                return (
+                  <div className="pb-row" key={p.id}>
+                    <div className="pname">{p.title}</div>
+                    <div className="pb-track"><div className="pb-fill" style={{width: stats.pct+'%'}}></div></div>
+                    <div className="pcount">{stats.solved}/{stats.total}</div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+        <div className="dash-grid">
+          <div className="card card-compact">
+            <Heatmap cells={heatmapCells} />
+          </div>
+          <div className="card card-compact">
+            <RevisitQueue queue={revisitQueue} onUpdate={updateItem} />
+          </div>
+        </div>
+        <div className="dash-grid">
+          <div className="card card-compact">
+            <NextBestAction action={nextAction} onRun={runNextBestAction} />
+          </div>
+          <div className="card card-compact">
+            <WeeklyTrends trends={trends} />
+          </div>
+        </div>
+        <div className="dash-grid">
+          <div className="card card-compact">
+            <DailyPlan items={dailyPlan} />
+          </div>
+          <div className="card card-compact">
+            <WeakPatterns insights={weakPatterns} />
+          </div>
+        </div>
+        <div className="dash-grid">
+          <div className="card card-compact">
+            <Milestones milestones={meta.milestones || []} onCreate={createSnapshotNow} />
+          </div>
+          <div className="card card-compact">
+            <div className="ring-label" style={{marginBottom:'12px'}}>System Checks <span style={{color:'var(--text-faint)', textTransform:'none', fontWeight:400}}>— {integrity.duplicateEntries ? `${integrity.duplicateEntries} duplicate entr${integrity.duplicateEntries === 1 ? 'y' : 'ies'}` : 'clean'}</span></div>
+            <div className="revisit-list">
+              <div className="revisit-row">
+                <div className="revisit-info">
+                  <div className="revisit-name">Duplicate canonical links</div>
+                  <div className="revisit-meta">{integrity.duplicateCanonicalKeys} canonical ids across {integrity.duplicateEntries} extra entries</div>
+                </div>
+              </div>
+              <div className="revisit-row">
+                <div className="revisit-info">
+                  <div className="revisit-name">Due reviews</div>
+                  <div className="revisit-meta">{integrity.dueReviews} problems currently due</div>
+                </div>
+              </div>
+              <div className="revisit-row">
+                <div className="revisit-info">
+                  <div className="revisit-name">Revision queue size</div>
+                  <div className="revisit-meta">{integrity.revisionCount} problems in revision phase</div>
+                </div>
+              </div>
+            </div>
+            <div style={{marginTop:'12px'}}>
+              <button className="revisit-solve-btn" onClick={runRepairPass}>Run Repair Pass</button>
+            </div>
+          </div>
+        </div>
+        <div className="dash-grid">
+          <div className="card card-compact">
+            <ProgressTracker tracker={tracker} />
+          </div>
+          <div className="card card-compact">
+            <StudyInsights tracker={tracker} />
+          </div>
+        </div>
+        <div className="dash-grid">
+          <div className="card card-compact">
+            <PhaseReadiness phases={readiness} />
+          </div>
+          <div className="card card-compact">
+            <RevisionIntelligence insights={revisionInsights} />
+          </div>
+        </div>
+        <div className="dash-grid">
+          <div className="card card-compact">
+            <SessionPlanner sessionMode={sessionMode} onChange={setSessionMode} planCount={dailyPlan.length} />
+          </div>
+          <div className="card card-compact">
+            <RecentActivity items={recentActivity} />
+          </div>
+        </div>
+      </div>}
+
+      {sectionTab === 'analysis' && <div className="dashboard">
+        <div className="dash-grid">
+          <div className="card card-compact">
+            <Heatmap cells={heatmapCells} />
+          </div>
+          <div className="card card-compact">
+            <WeakPatterns insights={weakPatterns} />
+          </div>
+        </div>
+        <div className="dash-grid">
+          <div className="card card-compact">
+            <NextBestAction action={nextAction} onRun={runNextBestAction} />
+          </div>
+          <div className="card card-compact">
+            <WeeklyTrends trends={trends} />
+          </div>
+        </div>
+        <div className="dash-grid">
+          <div className="card card-compact">
+            <DailyPlan items={dailyPlan} />
+          </div>
+          <div className="card card-compact">
+            <Milestones milestones={meta.milestones || []} onCreate={createSnapshotNow} />
+          </div>
+        </div>
+        <div className="dash-grid">
+          <div className="card card-compact">
+            <ProgressTracker tracker={tracker} />
+          </div>
+          <div className="card card-compact">
+            <StudyInsights tracker={tracker} />
+          </div>
+        </div>
+        <div className="dash-grid">
+          <div className="card card-compact">
+            <PhaseReadiness phases={readiness} />
+          </div>
+          <div className="card card-compact">
+            <RevisionIntelligence insights={revisionInsights} />
+          </div>
+        </div>
+        <div className="dash-grid">
+          <div className="card card-compact">
+            <SessionPlanner sessionMode={sessionMode} onChange={setSessionMode} planCount={dailyPlan.length} />
+          </div>
+          <div className="card card-compact">
+            <RecentActivity items={recentActivity} />
+          </div>
+        </div>
+      </div>}
+
+      {sectionTab === 'problems' && <div className="controls">
+        <div className="control-block">
+          <span className="control-label">View</span>
+          <button className={`filter-btn ${viewMode==='topic'?'active':''}`} onClick={() => setViewMode('topic')}>By Topic</button>
+          <button className={`filter-btn ${viewMode==='pattern'?'active':''}`} onClick={() => setViewMode('pattern')}>By Pattern</button>
+          <button className={`filter-btn ${focusMode ? 'active' : ''}`} onClick={() => setFocusMode(v => !v)}>
+            {focusMode ? 'Show Dashboard' : 'Focus Mode'}
+          </button>
+        </div>
+        <div className="control-block">
+          <span className="control-label">Status</span>
+          {['all','not-started','attempted','solved','revisit'].map(f => (
+            <button key={f} className={`filter-btn ${filter===f?'active':''}`} onClick={() => setFilter(f)}>
+              {f === 'all' ? 'All' : statusLabel(f)}
+            </button>
+          ))}
+        </div>
+        <div className="control-block">
+          <span className="control-label">Density</span>
+          <button className={`filter-btn ${compactMode ? 'active' : ''}`} onClick={() => setCompactMode(v => !v)}>
+            {compactMode ? 'Comfortable View' : 'Compact View'}
+          </button>
+          {!showTips && (
+            <button className="tip-btn" onClick={() => { setShowTips(true); writeTipsDismissed(false); }}>Show tips</button>
+          )}
+          {(filter !== 'all' || searchQuery) && (
+            <button className="reset-btn" onClick={() => { setFilter('all'); setSearchQuery(''); }}>Clear filters</button>
+          )}
+        </div>
+        <div className="control-block">
+          <span className="control-label">Data</span>
+          <button className="reset-btn reset-neutral" onClick={exportBackup}>Export backup</button>
+          <button className="reset-btn reset-neutral" onClick={() => importFileRef.current.click()}>Import backup</button>
+        </div>
+        <div className="control-block search-wrap">
+          <span className="control-label">Search</span>
+          {Icon({ name: 'search', size: 14 })}
+          <input
+            ref={searchInputRef}
+            className="search-input"
+            type="text"
+            value={searchQuery}
+            onChange={e => setSearchQuery(e.target.value)}
+            placeholder="Search title / pattern / company"
+            aria-label="Search problems"
+          />
+          {searchQuery && <button className="search-clear" onClick={() => setSearchQuery('')}>Clear</button>}
+          <span className="search-count">{visibleCount} shown</span>
+          <span className="search-hint">/ focus · Esc clear</span>
+        </div>
+        <input ref={importFileRef} type="file" accept="application/json" style={{display:'none'}}
+          onChange={e => { if(e.target.files[0]) importBackup(e.target.files[0]); e.target.value = ''; }} />
+      </div>}
+      {showTips && (
+        <div className="tips-bar">
+          <div className="tips-title">Quick tips</div>
+          <div className="tips-items">
+            <span>/ focuses search</span>
+            <span className="tips-sep">•</span>
+            <span>Esc clears search</span>
+            <span className="tips-sep">•</span>
+            <span>Use Compact View for dense scanning</span>
+            <span className="tips-sep">•</span>
+            <span>Revisit queue surfaces due practice first</span>
+          </div>
+          <div className="tips-actions">
+            <button className="tip-btn" onClick={() => { setShowTips(false); writeTipsDismissed(true); }}>Dismiss</button>
+          </div>
+        </div>
+      )}
+      {importNotice && (
+        <div className="notice-bar"><strong>Import report:</strong> {importNotice}</div>
+      )}
+
+      {toast && (
+        <div className="toast-wrap">
+          <div className={`toast toast-${toast.type}`}>
+            <div className="toast-main">
+              <div className="toast-copy">
+                <div className="toast-head">
+                  {Icon({ name: toast.icon || (toast.type === 'error' ? 'refresh' : 'check'), size: 12 })}
+                  <span className="toast-message">{toast.message}</span>
+                </div>
+                {toast.detail && <div className="toast-detail">{toast.detail}</div>}
+              </div>
+              {toast.actionLabel && typeof toast.onAction === 'function' && (
+                <button
+                  className="toast-action"
+                  onClick={() => { toast.onAction(); setToast(null); }}
+                >
+                  {Icon({ name: 'undo', size: 11 })} {toast.actionLabel}
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showShortcutModal && (
+        <div className="shortcuts-overlay" onClick={() => setShowShortcutModal(false)}>
+          <div className="shortcuts-card" onClick={e => e.stopPropagation()}>
+            <div className="shortcuts-head">
+              <div className="shortcuts-title">Keyboard shortcuts</div>
+              <button className="tip-btn" onClick={() => setShowShortcutModal(false)}>Close</button>
+            </div>
+            <div className="shortcut-list">
+              <div className="shortcut-row"><span className="shortcut-key">/</span><span className="shortcut-desc">Focus search</span></div>
+              <div className="shortcut-row"><span className="shortcut-key">Esc</span><span className="shortcut-desc">Clear search or close modal</span></div>
+              <div className="shortcut-row"><span className="shortcut-key">?</span><span className="shortcut-desc">Toggle shortcuts modal</span></div>
+              <div className="shortcut-row"><span className="shortcut-key">Enter</span><span className="shortcut-desc">Submit add-problem row fields</span></div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {sectionTab === 'problems' && <div className="list">
+        {viewMode === 'topic'
+          ? PHASE_DEFS.map((def, idx) => (
+              <PhaseGroup key={def.id} def={def} idx={idx} items={phases[def.id] || []}
+                filter={filter} searchQuery={searchQuery}
+                isOpen={isTopicGroupOpen(def.id, idx)}
+                onToggle={() => toggleTopicGroup(def.id, idx)}
+                onUpdate={updateItem} onDelete={deleteItem} onAdd={addItem} onToast={pushToast} intentRules={meta.problemIntentRules || []} />
+            ))
+          : byPattern.map(([patternName, entries], idx) => (
+              <PatternGroup key={patternName} patternName={patternName} idx={idx} entries={entries}
+                filter={filter} searchQuery={searchQuery}
+                isOpen={isPatternGroupOpen(patternName, idx)}
+                onToggle={() => togglePatternGroup(patternName, idx)}
+                onUpdate={updateItem} onDelete={deleteItem} onToast={pushToast} intentRules={meta.problemIntentRules || []} />
+            ))
+        }
+          </div>}
+
+      <footer>data stored in data/data.json on your machine · add problems from Striver's SDE Sheet, NeetCode 150, or LeetCode as you go</footer>
+      </div>
+    </React.Fragment>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>
